@@ -1,0 +1,19 @@
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.env.*
+!.env.example
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Documents de travail (non publiés)
+*.PDF
+*.pdf
+WhatsApp Image*

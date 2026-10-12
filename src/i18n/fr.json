@@ -1,0 +1,378 @@
+{
+  "app": {
+    "name": "Catalogue des services",
+    "tagline": "Portail des applications internes"
+  },
+  "common": {
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "saving": "Enregistrement…",
+    "delete": "Supprimer",
+    "deleting": "Suppression…",
+    "edit": "Modifier",
+    "retry": "Réessayer",
+    "close": "Fermer",
+    "optional": "Facultatif",
+    "actions": "Actions",
+    "moreActions": "Plus d'actions",
+    "clear": "Effacer",
+    "removeItem": "Retirer {{item}}",
+    "loading": "Chargement…",
+    "notSet": "Non renseigné"
+  },
+  "header": {
+    "language": "Langue",
+    "toggleTheme": "Changer de thème",
+    "switchToLight": "Passer en mode clair",
+    "switchToDark": "Passer en mode sombre",
+    "userMenu": "Menu utilisateur",
+    "signedInAs": "Connecté en tant que",
+    "logout": "Se déconnecter",
+    "changePassword": "Changer le mot de passe",
+    "lock": "Verrouiller la session"
+  },
+  "auth": {
+    "title": "Connexion",
+    "subtitle": "Le catalogue de référence des applications et services internes : environnements, équipes, technologies et documentation.",
+    "email": "Adresse e-mail",
+    "emailPlaceholder": "nom@vodacom.cd",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Saisissez votre mot de passe",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "submit": "Se connecter",
+    "submitting": "Connexion…",
+    "welcome": "Bon retour, {{name}}",
+    "invalidCredentials": "E-mail ou mot de passe incorrect.",
+    "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter.",
+    "loggedOut": "Vous avez été déconnecté.",
+    "footer": "Accès réservé au personnel autorisé de Vodacom.",
+    "headline": "Toutes les applications Vodacom, en un seul endroit.",
+    "formSubtitle": "Connectez-vous avec votre compte professionnel Vodacom.",
+    "mockNotice": "Mode démo — n’importe quel e-mail et mot de passe fonctionnent.",
+    "features": {
+      "inventory": {
+        "title": "Inventaire centralisé",
+        "description": "Toutes les applications internes, leurs équipes et leurs technologies en un coup d’œil."
+      },
+      "environments": {
+        "title": "Environnements & liens",
+        "description": "Production, UAT et code source accessibles en un clic."
+      },
+      "documentation": {
+        "title": "Documentation vivante",
+        "description": "Architecture, spécifications d’API et guides rattachés à chaque service."
+      }
+    },
+    "confirm": {
+      "back": "Ce n’est pas vous ? Changer de compte"
+    },
+    "otp": {
+      "title": "Vérifiez votre e-mail",
+      "subtitle": "Nous avons envoyé un code de vérification à {{count}} chiffres à l’adresse ci-dessous.",
+      "label": "Code de vérification",
+      "submit": "Vérifier et continuer",
+      "checking": "Vérification…",
+      "incomplete": "Saisissez les {{count}} chiffres du code.",
+      "wrong": "Code incorrect. Veuillez réessayer.",
+      "expired": "Ce code a expiré. Demandez-en un nouveau.",
+      "notReceived": "Vous n’avez pas reçu le code ?",
+      "resend": "Renvoyer le code",
+      "resendIn_one": "Renvoi possible dans {{count}} s",
+      "resendIn_other": "Renvoi possible dans {{count}} s",
+      "resent": "Un nouveau code a été envoyé.",
+      "sent": "Un code de vérification a été envoyé à {{email}}.",
+      "demo": "Mode démo — aucun e-mail n’est envoyé. Votre code :"
+    }
+  },
+  "services": {
+    "title": "Applications & services",
+    "subtitle_one": "{{count}} service enregistré",
+    "subtitle_other": "{{count}} services enregistrés",
+    "add": "Ajouter un service",
+    "searchPlaceholder": "Rechercher par nom, description, développeur…",
+    "filterByTech": "Technologies",
+    "techFilterEmpty": "Aucune technologie pour l'instant",
+    "clearFilters": "Réinitialiser les filtres",
+    "viewGrid": "Vue en grille",
+    "viewTable": "Vue en tableau",
+    "results_one": "{{count}} résultat",
+    "results_other": "{{count}} résultats",
+    "emptyTitle": "Aucun service pour l'instant",
+    "emptyDescription": "Enregistrez la première application pour démarrer le catalogue.",
+    "noResultsTitle": "Aucun service correspondant",
+    "noResultsDescription": "Essayez un autre terme ou retirez des filtres.",
+    "errorTitle": "Impossible de charger les services",
+    "errorDescription": "Une erreur est survenue lors de la communication avec le serveur.",
+    "fields": {
+      "name": "Nom de l'application",
+      "description": "Description",
+      "developers": "Développeurs",
+      "githubUrl": "Dépôt GitHub",
+      "liveUrl": "Live (production)",
+      "uatUrl": "UAT (pré-production)",
+      "firstDeployment": "Premier déploiement",
+      "lastDeployment": "Dernier déploiement",
+      "techStack": "Stack technique",
+      "documents": "Documents",
+      "links": "Liens",
+      "status": "Statut",
+      "department": "Département"
+    },
+    "placeholders": {
+      "name": "ex. Customer Self-Care",
+      "description": "Que fait ce service et qui l'utilise ?",
+      "developers": "Saisissez un nom puis Entrée",
+      "techStack": "ex. React, NestJS, Docker",
+      "url": "https://",
+      "department": "Choisissez un département"
+    },
+    "hints": {
+      "developers": "Appuyez sur Entrée ou virgule pour ajouter chaque développeur.",
+      "techStack": "Appuyez sur Entrée ou virgule pour ajouter chaque technologie."
+    },
+    "links": {
+      "github": "GitHub",
+      "live": "Live",
+      "uat": "UAT"
+    },
+    "noLinks": "Aucun lien",
+    "noDocuments": "Aucun document",
+    "documentsCount": "{{count}} / {{max}}",
+    "deployedOn": "Déployé le {{date}}",
+    "form": {
+      "createTitle": "Ajouter un service",
+      "editTitle": "Modifier le service",
+      "createDescription": "Enregistrez une nouvelle application dans le catalogue.",
+      "editDescription": "Mettez à jour les informations de {{name}}.",
+      "sectionGeneral": "Informations générales",
+      "sectionLinks": "Environnements & liens",
+      "sectionDeployment": "Déploiement",
+      "sectionDocuments": "Pièces jointes",
+      "submitCreate": "Créer le service",
+      "submitEdit": "Enregistrer les modifications",
+      "discardTitle": "Abandonner les modifications ?",
+      "discardDescription": "Les modifications non enregistrées seront perdues."
+    },
+    "delete": {
+      "title": "Supprimer ce service ?",
+      "description": "« {{name}} » et ses documents joints seront définitivement supprimés. Cette action est irréversible.",
+      "confirm": "Supprimer le service"
+    },
+    "toast": {
+      "created": "« {{name}} » a été ajouté au catalogue.",
+      "updated": "« {{name}} » a été mis à jour.",
+      "deleted": "« {{name}} » a été supprimé."
+    },
+    "viewMode": "Mode d’affichage"
+  },
+  "upload": {
+    "dropzone": "Glissez-déposez vos fichiers ici, ou",
+    "browse": "parcourez",
+    "hint": "PDF, images, documents Office, diagrammes — {{size}} Mo max. par fichier",
+    "remaining_one": "{{count}} emplacement restant",
+    "remaining_other": "{{count}} emplacements restants",
+    "full": "Limite de {{max}} documents atteinte",
+    "fullHint": "Retirez un document pour en ajouter un autre.",
+    "limitReached": "Un service peut contenir au maximum {{max}} documents. Les fichiers en trop ont été ignorés.",
+    "invalidType": "« {{name}} » n'est pas un type de fichier pris en charge.",
+    "tooLarge": "« {{name}} » dépasse la limite de {{size}} Mo.",
+    "duplicate": "« {{name}} » est déjà dans la liste.",
+    "remove": "Retirer {{name}}",
+    "open": "Ouvrir {{name}}",
+    "newBadge": "Nouveau"
+  },
+  "validation": {
+    "required": "Ce champ est obligatoire.",
+    "tooLong": "Cette valeur est trop longue.",
+    "email": "Saisissez une adresse e-mail valide.",
+    "url": "Saisissez une URL valide commençant par http:// ou https://.",
+    "developersRequired": "Ajoutez au moins un développeur.",
+    "dateOrder": "Le dernier déploiement ne peut pas précéder le premier."
+  },
+  "errors": {
+    "generic": "Une erreur est survenue. Veuillez réessayer.",
+    "network": "Serveur injoignable. Vérifiez votre connexion.",
+    "unauthorized": "Vous n'êtes pas autorisé à effectuer cette action.",
+    "notFound": "La ressource demandée est introuvable.",
+    "tooManyRequests": "Trop de tentatives. Patientez une minute puis réessayez."
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "description": "La page que vous cherchez n'existe pas ou a été déplacée.",
+    "backHome": "Retour au catalogue",
+    "code": "Erreur 404"
+  },
+  "layout": {
+    "copyright": "© {{year}} Vodacom Congo. Tous droits réservés.",
+    "version": "Service Catalog v{{version}}"
+  },
+  "dashboard": {
+    "eyebrow": "Portail interne Vodacom",
+    "subtitle": "Retrouvez, documentez et gérez toutes les applications internes de Vodacom — environnements, équipes et documentation au même endroit.",
+    "greeting": {
+      "morning": "Bonjour, {{name}}",
+      "afternoon": "Bon après-midi, {{name}}",
+      "evening": "Bonsoir, {{name}}"
+    }
+  },
+  "status": {
+    "live": "En production",
+    "uat": "UAT uniquement",
+    "none": "Non déployé"
+  },
+  "charts": {
+    "sectionLabel": "Vue d'ensemble du catalogue",
+    "deploymentsTitle": "Déploiements",
+    "deploymentCount_one": "{{count}} déploiement",
+    "deploymentCount_other": "{{count}} déploiements",
+    "techTitle": "Technologies",
+    "techUsage": "{{count}} applications sur {{total}}",
+    "statusTitle": "Environnements",
+    "applications_one": "application",
+    "applications_other": "applications",
+    "empty": "Aucune donnée pour le moment",
+    "linkApplications": "Voir les applications",
+    "linkTechnologies": "Voir les technologies"
+  },
+  "lock": {
+    "title": "Session verrouillée",
+    "description": "Pour votre sécurité, saisissez votre mot de passe pour continuer.",
+    "unlock": "Déverrouiller",
+    "unlocking": "Vérification…",
+    "unlocked": "Session déverrouillée.",
+    "wrongPassword_one": "Mot de passe incorrect. {{count}} essai restant.",
+    "wrongPassword_other": "Mot de passe incorrect. {{count}} essais restants.",
+    "attemptsLeft_one": "{{count}} essai restant avant déconnexion",
+    "attemptsLeft_other": "{{count}} essais restants avant déconnexion",
+    "tooManyAttempts": "Trop de tentatives échouées. Vous avez été déconnecté.",
+    "switchAccount": "Ce n’est pas vous ? Se déconnecter"
+  },
+  "password": {
+    "title": "Changer le mot de passe",
+    "description": "Choisissez un nouveau mot de passe pour votre compte.",
+    "current": "Mot de passe actuel",
+    "new": "Nouveau mot de passe",
+    "confirm": "Confirmer le nouveau mot de passe",
+    "submit": "Mettre à jour",
+    "success": "Votre mot de passe a été mis à jour.",
+    "rulesLabel": "Exigences du mot de passe",
+    "rules": {
+      "length": "8 caractères minimum",
+      "letter": "Au moins une lettre",
+      "number": "Au moins un chiffre"
+    },
+    "validation": {
+      "weak": "Le mot de passe ne respecte pas les exigences.",
+      "mismatch": "Les mots de passe ne correspondent pas.",
+      "same": "Le nouveau mot de passe doit être différent de l’actuel.",
+      "wrongCurrent": "Le mot de passe actuel est incorrect."
+    }
+  },
+  "departments": {
+    "technology": "Technologie & SI",
+    "network": "Réseau",
+    "commercial": "Commercial & Marketing",
+    "customer-care": "Service Client",
+    "mpesa": "M-Pesa & Services financiers",
+    "enterprise": "Vodacom Business",
+    "finance": "Finance",
+    "human-resources": "Ressources humaines",
+    "legal": "Juridique & Réglementaire",
+    "supply-chain": "Supply Chain & Logistique"
+  },
+  "nav": {
+    "label": "Navigation principale",
+    "section": "Menu",
+    "open": "Ouvrir le menu",
+    "dashboard": "Tableau de bord",
+    "applications": "Applications",
+    "technologies": "Technologies",
+    "developers": "Développeurs",
+    "hide": "Masquer la barre latérale",
+    "show": "Afficher la barre latérale",
+    "settings": "Paramètres"
+  },
+  "pages": {
+    "dashboard": {
+      "recentTitle": "Derniers déploiements"
+    },
+    "applications": {
+      "developerFilter": "Développeur : {{name}}"
+    },
+    "technologies": {
+      "subtitle_one": "{{count}} technologie utilisée dans le catalogue",
+      "subtitle_other": "{{count}} technologies utilisées dans le catalogue",
+      "search": "Rechercher une technologie…",
+      "usedBy_one": "Utilisée par {{count}} application",
+      "usedBy_other": "Utilisée par {{count}} applications",
+      "more_one": "+ {{count}} autre application",
+      "more_other": "+ {{count}} autres applications",
+      "viewApps": "Voir ces applications"
+    },
+    "developers": {
+      "subtitle_one": "{{count}} développeur contribue au catalogue",
+      "subtitle_other": "{{count}} développeurs contribuent au catalogue",
+      "search": "Rechercher un développeur ou une technologie…",
+      "appCount_one": "{{count}} application",
+      "appCount_other": "{{count}} applications",
+      "applications": "Applications",
+      "viewApps": "Voir ses applications"
+    }
+  },
+  "settings": {
+    "subtitle": "Gérez votre profil, vos préférences d’affichage et la sécurité.",
+    "profile": {
+      "title": "Profil",
+      "name": "Nom complet",
+      "email": "Adresse e-mail",
+      "managed": "Les informations du profil proviennent de votre compte professionnel Vodacom."
+    },
+    "appearance": {
+      "title": "Apparence",
+      "theme": "Thème",
+      "themeHint": "Clair, sombre ou selon le réglage de votre système.",
+      "light": "Clair",
+      "dark": "Sombre",
+      "system": "Système",
+      "languageHint": "Langue de l’interface.",
+      "view": "Affichage par défaut",
+      "viewHint": "Présentation du catalogue des applications.",
+      "sidebar": "Afficher la barre latérale",
+      "sidebarHint": "Menu de navigation à gauche de l’écran (grands écrans)."
+    },
+    "security": {
+      "title": "Sécurité",
+      "password": "Mot de passe",
+      "passwordHint": "Modifiez le mot de passe de votre compte.",
+      "autoLock": "Verrouillage automatique",
+      "autoLockHint": "Verrouille la session après une période d’inactivité.",
+      "minutes_one": "{{count}} min",
+      "minutes_other": "{{count}} min",
+      "never": "Jamais",
+      "lockNow": "Verrouiller maintenant",
+      "lockNowHint": "Masque l’écran jusqu’à la saisie de votre mot de passe."
+    },
+    "data": {
+      "title": "Données & application",
+      "version": "Version",
+      "mode": "Source des données",
+      "mock": "Démo (API simulée)",
+      "live": "API du backend",
+      "api": "Adresse de l’API",
+      "reset": "Réinitialiser les données de démo",
+      "resetHint": "Restaure les 12 applications d’exemple et supprime vos modifications.",
+      "resetAction": "Réinitialiser",
+      "resetConfirmTitle": "Réinitialiser les données de démo ?",
+      "resetConfirm": "Toutes les applications ajoutées, modifiées ou supprimées en mode démo seront remplacées par le catalogue d’exemple.",
+      "resetDone": "Les données de démo ont été réinitialisées.",
+      "status": "État de l’API",
+      "checking": "Vérification…",
+      "online": "En ligne",
+      "offline": "Injoignable"
+    },
+    "session": {
+      "title": "Session"
+    }
+  }
+}

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#E60000" />
+    <meta name="description" content="Vodacom internal catalog of applications and services" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Police chargée sans bloquer l'affichage (si Google Fonts est lent ou inaccessible) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
+    <title>Vodacom · Service Catalog</title>
+    <!-- Applique le thème avant le premier rendu pour éviter le flash clair/sombre -->
+    <script>
+      (function () {
+        try {
+          var stored = JSON.parse(localStorage.getItem('vsc-preferences') || '{}');
+          var state = stored.state || {};
+          var theme = state.theme || 'system';
+          var dark =
+            theme === 'dark' ||
+            (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.classList.toggle('dark', dark);
+          document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+          if (state.language) document.documentElement.lang = state.language;
+        } catch (e) {}
+      })();
+    </script>
+    <style>
+      /* Écran de chargement affiché avant le démarrage de React */
+      .boot { position: fixed; inset: 0; display: grid; place-items: center; background: #f8f9fa; }
+      .dark .boot { background: #0f0f12; }
+      .boot-inner { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+      .boot img { width: 56px; height: 56px; }
+      .boot-bar { width: 120px; height: 3px; border-radius: 3px; overflow: hidden; background: #e5e7eb; }
+      .dark .boot-bar { background: #3f3f46; }
+      .boot-bar::after { content: ''; display: block; width: 40%; height: 100%; border-radius: 3px; background: #e60000; animation: boot 1.1s ease-in-out infinite; }
+      @keyframes boot { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div class="boot" role="status" aria-label="Loading…">
+        <div class="boot-inner">
+          <img src="/favicon.png" alt="Vodacom" />
+          <div class="boot-bar"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      // Libellé de l'écran de chargement dans la langue enregistrée (EN par défaut).
+      if (document.documentElement.lang === 'fr') {
+        document.querySelector('.boot').setAttribute('aria-label', 'Chargement…');
+      }
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

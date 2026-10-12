@@ -1,0 +1,378 @@
+{
+  "app": {
+    "name": "Service Catalog",
+    "tagline": "Internal applications portal"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "delete": "Delete",
+    "deleting": "Deleting…",
+    "edit": "Edit",
+    "retry": "Try again",
+    "close": "Close",
+    "optional": "Optional",
+    "actions": "Actions",
+    "moreActions": "More actions",
+    "clear": "Clear",
+    "removeItem": "Remove {{item}}",
+    "loading": "Loading…",
+    "notSet": "Not set"
+  },
+  "header": {
+    "language": "Language",
+    "toggleTheme": "Toggle theme",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode",
+    "userMenu": "User menu",
+    "signedInAs": "Signed in as",
+    "logout": "Sign out",
+    "changePassword": "Change password",
+    "lock": "Lock session"
+  },
+  "auth": {
+    "title": "Sign in",
+    "subtitle": "The reference catalog of internal applications and services: environments, teams, technologies and documentation.",
+    "email": "Email",
+    "emailPlaceholder": "name@vodacom.cd",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "welcome": "Welcome back, {{name}}",
+    "invalidCredentials": "Invalid email or password.",
+    "sessionExpired": "Your session has expired. Please sign in again.",
+    "loggedOut": "You have been signed out.",
+    "footer": "Restricted to authorised Vodacom personnel.",
+    "headline": "Every Vodacom application, in one place.",
+    "formSubtitle": "Sign in with your Vodacom corporate account.",
+    "mockNotice": "Demo mode — any email and password will work.",
+    "features": {
+      "inventory": {
+        "title": "Centralised inventory",
+        "description": "All internal applications, owners and tech stacks at a glance."
+      },
+      "environments": {
+        "title": "Environments & links",
+        "description": "Production, UAT and source code — one click away."
+      },
+      "documentation": {
+        "title": "Living documentation",
+        "description": "Architecture, API specs and user guides attached to each service."
+      }
+    },
+    "confirm": {
+      "back": "Not you? Use another account"
+    },
+    "otp": {
+      "title": "Check your email",
+      "subtitle": "We sent a {{count}}-digit verification code to the address below.",
+      "label": "Verification code",
+      "submit": "Verify and continue",
+      "checking": "Verifying…",
+      "incomplete": "Enter the {{count}} digits of the code.",
+      "wrong": "Incorrect code. Please try again.",
+      "expired": "This code has expired. Request a new one.",
+      "notReceived": "Didn’t receive the code?",
+      "resend": "Resend code",
+      "resendIn_one": "Resend in {{count}} s",
+      "resendIn_other": "Resend in {{count}} s",
+      "resent": "A new code has been sent.",
+      "sent": "A verification code has been sent to {{email}}.",
+      "demo": "Demo mode — no email is sent. Your code:"
+    }
+  },
+  "services": {
+    "title": "Applications & services",
+    "subtitle_one": "{{count}} service registered",
+    "subtitle_other": "{{count}} services registered",
+    "add": "Add service",
+    "searchPlaceholder": "Search by name, description, developer…",
+    "filterByTech": "Technologies",
+    "techFilterEmpty": "No technologies yet",
+    "clearFilters": "Clear filters",
+    "viewGrid": "Grid view",
+    "viewTable": "Table view",
+    "results_one": "{{count}} result",
+    "results_other": "{{count}} results",
+    "emptyTitle": "No services yet",
+    "emptyDescription": "Register the first application to start building the catalog.",
+    "noResultsTitle": "No matching services",
+    "noResultsDescription": "Try another search term or remove some filters.",
+    "errorTitle": "Unable to load services",
+    "errorDescription": "Something went wrong while contacting the server.",
+    "fields": {
+      "name": "Application name",
+      "description": "Description",
+      "developers": "Developers",
+      "githubUrl": "GitHub repository",
+      "liveUrl": "Live (production)",
+      "uatUrl": "UAT (staging)",
+      "firstDeployment": "First deployment",
+      "lastDeployment": "Last deployment",
+      "techStack": "Tech stack",
+      "documents": "Documents",
+      "links": "Links",
+      "status": "Status",
+      "department": "Department"
+    },
+    "placeholders": {
+      "name": "e.g. Customer Self-Care",
+      "description": "What does this service do, and who uses it?",
+      "developers": "Type a name and press Enter",
+      "techStack": "e.g. React, NestJS, Docker",
+      "url": "https://",
+      "department": "Select a department"
+    },
+    "hints": {
+      "developers": "Press Enter or comma to add each developer.",
+      "techStack": "Press Enter or comma to add each technology."
+    },
+    "links": {
+      "github": "GitHub",
+      "live": "Live",
+      "uat": "UAT"
+    },
+    "noLinks": "No links",
+    "noDocuments": "No documents",
+    "documentsCount": "{{count}} / {{max}}",
+    "deployedOn": "Deployed {{date}}",
+    "form": {
+      "createTitle": "Add a service",
+      "editTitle": "Edit service",
+      "createDescription": "Register a new application in the catalog.",
+      "editDescription": "Update the information for {{name}}.",
+      "sectionGeneral": "General information",
+      "sectionLinks": "Environments & links",
+      "sectionDeployment": "Deployment",
+      "sectionDocuments": "Attachments",
+      "submitCreate": "Create service",
+      "submitEdit": "Save changes",
+      "discardTitle": "Discard changes?",
+      "discardDescription": "Your unsaved changes will be lost."
+    },
+    "delete": {
+      "title": "Delete this service?",
+      "description": "“{{name}}” and its attached documents will be permanently removed. This action cannot be undone.",
+      "confirm": "Delete service"
+    },
+    "toast": {
+      "created": "“{{name}}” has been added to the catalog.",
+      "updated": "“{{name}}” has been updated.",
+      "deleted": "“{{name}}” has been deleted."
+    },
+    "viewMode": "Display mode"
+  },
+  "upload": {
+    "dropzone": "Drag & drop files here, or",
+    "browse": "browse",
+    "hint": "PDF, images, Office documents, diagrams — max {{size}} MB each",
+    "remaining_one": "{{count}} slot remaining",
+    "remaining_other": "{{count}} slots remaining",
+    "full": "Maximum of {{max}} documents reached",
+    "fullHint": "Remove a document to add another one.",
+    "limitReached": "A service can have at most {{max}} documents. Extra files were ignored.",
+    "invalidType": "“{{name}}” is not a supported file type.",
+    "tooLarge": "“{{name}}” exceeds the {{size}} MB limit.",
+    "duplicate": "“{{name}}” is already in the list.",
+    "remove": "Remove {{name}}",
+    "open": "Open {{name}}",
+    "newBadge": "New"
+  },
+  "validation": {
+    "required": "This field is required.",
+    "tooLong": "This value is too long.",
+    "email": "Enter a valid email address.",
+    "url": "Enter a valid URL starting with http:// or https://.",
+    "developersRequired": "Add at least one developer.",
+    "dateOrder": "Last deployment cannot be earlier than the first one."
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Unable to reach the server. Check your connection.",
+    "unauthorized": "You are not authorised to perform this action.",
+    "notFound": "The requested resource was not found.",
+    "tooManyRequests": "Too many attempts. Please wait a minute and try again."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for doesn't exist or has been moved.",
+    "backHome": "Back to catalog",
+    "code": "Error 404"
+  },
+  "layout": {
+    "copyright": "© {{year}} Vodacom Congo. All rights reserved.",
+    "version": "Service Catalog v{{version}}"
+  },
+  "dashboard": {
+    "eyebrow": "Vodacom internal portal",
+    "subtitle": "Find, document and manage every internal Vodacom application — environments, teams and documentation in one place.",
+    "greeting": {
+      "morning": "Good morning, {{name}}",
+      "afternoon": "Good afternoon, {{name}}",
+      "evening": "Good evening, {{name}}"
+    }
+  },
+  "status": {
+    "live": "In production",
+    "uat": "UAT only",
+    "none": "Not deployed"
+  },
+  "charts": {
+    "sectionLabel": "Catalog overview",
+    "deploymentsTitle": "Deployments",
+    "deploymentCount_one": "{{count}} deployment",
+    "deploymentCount_other": "{{count}} deployments",
+    "techTitle": "Technologies",
+    "techUsage": "{{count}} of {{total}} applications",
+    "statusTitle": "Environments",
+    "applications_one": "application",
+    "applications_other": "applications",
+    "empty": "No data yet",
+    "linkApplications": "View applications",
+    "linkTechnologies": "View technologies"
+  },
+  "lock": {
+    "title": "Session locked",
+    "description": "For your security, enter your password to continue.",
+    "unlock": "Unlock",
+    "unlocking": "Checking…",
+    "unlocked": "Session unlocked.",
+    "wrongPassword_one": "Incorrect password. {{count}} attempt left.",
+    "wrongPassword_other": "Incorrect password. {{count}} attempts left.",
+    "attemptsLeft_one": "{{count}} attempt left before sign-out",
+    "attemptsLeft_other": "{{count}} attempts left before sign-out",
+    "tooManyAttempts": "Too many failed attempts. You have been signed out.",
+    "switchAccount": "Not you? Sign out"
+  },
+  "password": {
+    "title": "Change password",
+    "description": "Choose a new password for your account.",
+    "current": "Current password",
+    "new": "New password",
+    "confirm": "Confirm new password",
+    "submit": "Update password",
+    "success": "Your password has been updated.",
+    "rulesLabel": "Password requirements",
+    "rules": {
+      "length": "8 characters minimum",
+      "letter": "At least one letter",
+      "number": "At least one number"
+    },
+    "validation": {
+      "weak": "The password does not meet the requirements.",
+      "mismatch": "The passwords do not match.",
+      "same": "The new password must differ from the current one.",
+      "wrongCurrent": "The current password is incorrect."
+    }
+  },
+  "departments": {
+    "technology": "Technology & IT",
+    "network": "Network",
+    "commercial": "Commercial & Marketing",
+    "customer-care": "Customer Care",
+    "mpesa": "M-Pesa & Financial Services",
+    "enterprise": "Vodacom Business",
+    "finance": "Finance",
+    "human-resources": "Human Resources",
+    "legal": "Legal & Regulatory",
+    "supply-chain": "Supply Chain & Logistics"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "section": "Menu",
+    "open": "Open menu",
+    "dashboard": "Dashboard",
+    "applications": "Applications",
+    "technologies": "Technologies",
+    "developers": "Developers",
+    "hide": "Hide sidebar",
+    "show": "Show sidebar",
+    "settings": "Settings"
+  },
+  "pages": {
+    "dashboard": {
+      "recentTitle": "Latest deployments"
+    },
+    "applications": {
+      "developerFilter": "Developer: {{name}}"
+    },
+    "technologies": {
+      "subtitle_one": "{{count}} technology used across the catalog",
+      "subtitle_other": "{{count}} technologies used across the catalog",
+      "search": "Search a technology…",
+      "usedBy_one": "Used by {{count}} application",
+      "usedBy_other": "Used by {{count}} applications",
+      "more_one": "+ {{count}} other application",
+      "more_other": "+ {{count}} other applications",
+      "viewApps": "View these applications"
+    },
+    "developers": {
+      "subtitle_one": "{{count}} developer contributes to the catalog",
+      "subtitle_other": "{{count}} developers contribute to the catalog",
+      "search": "Search a developer or a technology…",
+      "appCount_one": "{{count}} application",
+      "appCount_other": "{{count}} applications",
+      "applications": "Applications",
+      "viewApps": "View their applications"
+    }
+  },
+  "settings": {
+    "subtitle": "Manage your profile, display preferences and security.",
+    "profile": {
+      "title": "Profile",
+      "name": "Full name",
+      "email": "Email",
+      "managed": "Profile information comes from your Vodacom corporate account."
+    },
+    "appearance": {
+      "title": "Appearance",
+      "theme": "Theme",
+      "themeHint": "Light, dark or follow your system setting.",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System",
+      "languageHint": "Interface language.",
+      "view": "Default view",
+      "viewHint": "How the application catalog is displayed.",
+      "sidebar": "Show sidebar",
+      "sidebarHint": "Navigation menu on the left of the screen (large screens)."
+    },
+    "security": {
+      "title": "Security",
+      "password": "Password",
+      "passwordHint": "Change the password of your account.",
+      "autoLock": "Automatic lock",
+      "autoLockHint": "Lock the session after a period of inactivity.",
+      "minutes_one": "{{count}} min",
+      "minutes_other": "{{count}} min",
+      "never": "Never",
+      "lockNow": "Lock now",
+      "lockNowHint": "Hide the screen until your password is entered again."
+    },
+    "data": {
+      "title": "Data & application",
+      "version": "Version",
+      "mode": "Data source",
+      "mock": "Demo (simulated API)",
+      "live": "Backend API",
+      "api": "API address",
+      "reset": "Reset demo data",
+      "resetHint": "Restores the 12 sample applications and removes your changes.",
+      "resetAction": "Reset",
+      "resetConfirmTitle": "Reset demo data?",
+      "resetConfirm": "All applications you added, edited or deleted in demo mode will be replaced by the sample catalog.",
+      "resetDone": "Demo data has been reset.",
+      "status": "API status",
+      "checking": "Checking…",
+      "online": "Online",
+      "offline": "Unreachable"
+    },
+    "session": {
+      "title": "Session"
+    }
+  }
+}

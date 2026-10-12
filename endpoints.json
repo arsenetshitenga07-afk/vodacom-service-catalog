@@ -1,0 +1,367 @@
+{
+  "name": "Portal Vodacom API",
+  "version": "1.0.0",
+  "baseUrl": "http://localhost:3000/api",
+  "prodUrl": "https://portal.vodacom.com/api",
+  "swaggerUrl": "/api/docs",
+  "globalPrefix": "/api",
+  "auth": {
+    "type": "bearer",
+    "scheme": "JWT",
+    "headerName": "Authorization",
+    "headerFormat": "Bearer <accessToken>",
+    "expiresIn": "7d",
+    "obtainedFrom": "POST /auth/login"
+  },
+  "rateLimit": {
+    "global": { "limit": 10, "window": "60s", "scope": "per IP" },
+    "authLogin": { "limit": 5, "window": "60s", "scope": "per IP", "rationale": "OWASP A07 anti-brute-force" }
+  },
+  "cors": {
+    "allowedOrigins": ["http://localhost:5173", "http://localhost:3000"],
+    "envVar": "CORS_ORIGINS",
+    "format": "CSV"
+  },
+  "endpoints": [
+    {
+      "id": "auth.login",
+      "method": "POST",
+      "path": "/auth/login",
+      "summary": "Connexion par email + password",
+      "access": "public",
+      "authRequired": false,
+      "contentType": "application/json",
+      "throttle": { "limit": 5, "window": "60s" },
+      "body": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "format": "email", "example": "admin@vodacom.cd" },
+          "password": { "type": "string", "minLength": 1, "example": "admin-pass-123" }
+        }
+      },
+      "responses": {
+        "200": { "description": "Login réussi", "schema": { "$ref": "#/$defs/loginResponse" } },
+        "400": { "description": "Body invalide", "schema": { "$ref": "#/$defs/validationError" } },
+        "401": { "description": "Identifiants invalides" },
+        "429": { "description": "Trop de tentatives (rate limit)" }
+      },
+      "example": {
+        "curl": "curl -X POST http://localhost:3000/api/auth/login -H 'Content-Type: application/json' -d '{\"email\":\"admin@vodacom.cd\",\"password\":\"admin-pass\"}'",
+        "ts": "const res = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });\nconst { accessToken, user } = await res.json();"
+      }
+    },
+    {
+      "id": "auth.me",
+      "method": "GET",
+      "path": "/auth/me",
+      "summary": "Profil de l'utilisateur courant",
+      "access": "authenticated",
+      "authRequired": true,
+      "responses": {
+        "200": { "description": "Profil utilisateur", "schema": { "$ref": "#/$defs/user" } },
+        "401": { "description": "Token manquant ou invalide" }
+      },
+      "example": {
+        "curl": "curl http://localhost:3000/api/auth/me -H 'Authorization: Bearer <token>'",
+        "ts": "const res = await fetch('/api/auth/me', { headers: { Authorization: `Bearer ${token}` } });\nconst profile = await res.json();"
+      }
+    },
+    {
+      "id": "health.check",
+      "method": "GET",
+      "path": "/health",
+      "summary": "Health check API + BDD",
+      "access": "public",
+      "authRequired": false,
+      "usedBy": ["Docker HEALTHCHECK", "Kubernetes liveness probe", "Load balancer"],
+      "responses": {
+        "200": { "description": "API et BDD OK", "schema": { "$ref": "#/$defs/healthResponse" } },
+        "503": { "description": "BDD inaccessible" }
+      }
+    },
+    {
+      "id": "services.list",
+      "method": "GET",
+      "path": "/services",
+      "summary": "Liste paginée des services",
+      "access": "authenticated",
+      "authRequired": true,
+      "queryParams": {
+        "page": { "type": "integer", "default": 1, "minimum": 1, "description": "Numéro de page" },
+        "limit": { "type": "integer", "default": 12, "minimum": 1, "maximum": 100, "description": "Items par page" },
+        "search": { "type": "string", "description": "Recherche full-text sur name + description" },
+        "tech": { "type": "string", "description": "Filtre exact sur une technologie" }
+      },
+      "responses": {
+        "200": { "description": "Liste paginée", "schema": { "$ref": "#/$defs/paginatedServices" } },
+        "401": { "description": "Token manquant ou invalide" }
+      },
+      "example": {
+        "curl": "curl 'http://localhost:3000/api/services?page=1&limit=20&search=portail' -H 'Authorization: Bearer <token>'",
+        "ts": "const res = await fetch(`/api/services?${params}`, { headers: { Authorization: `Bearer ${token}` } });\nconst { data, meta } = await res.json();"
+      }
+    },
+    {
+      "id": "services.technologies",
+      "method": "GET",
+      "path": "/services/technologies",
+      "summary": "Liste unique des technologies utilisées (pour filtre dropdown)",
+      "access": "authenticated",
+      "authRequired": true,
+      "routingNote": "Doit rester AVANT GET /services/:id (géré côté backend)",
+      "responses": {
+        "200": { "description": "Liste des technologies", "schema": { "type": "array", "items": { "type": "string" }, "example": ["React", "NestJS", "PostgreSQL", "Node.js", "TypeScript"] } }
+      }
+    },
+    {
+      "id": "services.getOne",
+      "method": "GET",
+      "path": "/services/{id}",
+      "summary": "Détail d'un service",
+      "access": "authenticated",
+      "authRequired": true,
+      "pathParams": { "id": { "type": "string", "format": "uuid", "required": true } },
+      "responses": {
+        "200": { "description": "Service trouvé", "schema": { "$ref": "#/$defs/service" } },
+        "400": { "description": "ID non UUID" },
+        "404": { "description": "Service introuvable" }
+      }
+    },
+    {
+      "id": "services.create",
+      "method": "POST",
+      "path": "/services",
+      "summary": "Créer un service (multipart avec upload)",
+      "access": "admin",
+      "authRequired": true,
+      "contentType": "multipart/form-data",
+      "formFields": {
+        "name": { "type": "string", "required": true, "maxLength": 120, "example": "Portail RH" },
+        "description": { "type": "string", "required": true },
+        "developers": { "type": "string[]", "required": true, "format": "champ répété OU CSV", "example": ["Alice", "Bob"] },
+        "techStack": { "type": "string[]", "required": false, "format": "champ répété OU CSV", "example": ["React", "NestJS"] },
+        "githubUrl": { "type": "string", "format": "uri", "required": false, "nullable": true },
+        "liveUrl": { "type": "string", "format": "uri", "required": false, "nullable": true },
+        "uatUrl": { "type": "string", "format": "uri", "required": false, "nullable": true },
+        "firstDeployedAt": { "type": "string", "format": "date-time", "required": false, "nullable": true, "constraint": "doit être <= lastDeployedAt" },
+        "lastDeployedAt": { "type": "string", "format": "date-time", "required": false, "nullable": true, "constraint": "doit être >= firstDeployedAt" },
+        "documents": {
+          "type": "file[]",
+          "required": false,
+          "maxCount": 4,
+          "maxSize": "10 Mo / fichier",
+          "allowedExtensions": [".pdf", ".png", ".jpg", ".jpeg", ".svg", ".txt", ".md", ".json", ".drawio", ".zip", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx"],
+          "fieldName": "documents"
+        }
+      },
+      "responses": {
+        "201": { "description": "Service créé", "schema": { "$ref": "#/$defs/service" } },
+        "400": { "description": "Données invalides OU Too many files (> 4)" },
+        "401": { "description": "Token manquant" },
+        "403": { "description": "Rôle non-admin" }
+      },
+      "example": {
+        "ts": "const fd = new FormData();\nfd.append('name', 'Portail RH');\nfd.append('description', 'Application RH');\nfd.append('developers', 'Alice');\nfd.append('developers', 'Bob');\nfd.append('techStack', 'React');\nfd.append('techStack', 'NestJS');\nfor (const file of files) fd.append('documents', file);\n\nconst res = await fetch('/api/services', {\n  method: 'POST',\n  headers: { Authorization: `Bearer ${token}` },\n  body: fd\n});\nconst created = await res.json();"
+      }
+    },
+    {
+      "id": "services.update",
+      "method": "PATCH",
+      "path": "/services/{id}",
+      "summary": "Mettre à jour un service (partial update, admin)",
+      "access": "admin",
+      "authRequired": true,
+      "contentType": "multipart/form-data",
+      "pathParams": { "id": { "type": "string", "format": "uuid", "required": true } },
+      "formFields": {
+        "name": { "type": "string", "required": false, "maxLength": 120 },
+        "description": { "type": "string", "required": false },
+        "developers": { "type": "string[]", "required": false, "format": "champ répété OU CSV" },
+        "techStack": { "type": "string[]", "required": false, "format": "champ répété OU CSV" },
+        "githubUrl": { "type": "string", "format": "uri", "required": false, "nullable": true },
+        "liveUrl": { "type": "string", "format": "uri", "required": false, "nullable": true },
+        "uatUrl": { "type": "string", "format": "uri", "required": false, "nullable": true },
+        "firstDeployedAt": { "type": "string", "format": "date-time", "required": false, "nullable": true },
+        "lastDeployedAt": { "type": "string", "format": "date-time", "required": false, "nullable": true },
+        "removeDocumentIds": { "type": "string[]", "required": false, "format": "UUID(s) séparés par virgule OU répétés", "description": "UUIDs des documents à supprimer" },
+        "documents": { "type": "file[]", "required": false, "maxCount": 4, "constraint": "keptCount + newCount <= 4" }
+      },
+      "responses": {
+        "200": { "description": "Service mis à jour", "schema": { "$ref": "#/$defs/service" } },
+        "400": { "description": "Données invalides OU total documents > 4" },
+        "404": { "description": "Service introuvable" }
+      }
+    },
+    {
+      "id": "services.delete",
+      "method": "DELETE",
+      "path": "/services/{id}",
+      "summary": "Supprimer un service (admin, cascade)",
+      "access": "admin",
+      "authRequired": true,
+      "pathParams": { "id": { "type": "string", "format": "uuid", "required": true } },
+      "cascade": ["documents (BDD + Cloudinary)", "developers", "technologies"],
+      "responses": {
+        "204": { "description": "Supprimé" },
+        "403": { "description": "Rôle non-admin" },
+        "404": { "description": "Service introuvable" }
+      }
+    },
+    {
+      "id": "services.downloadDocument",
+      "method": "GET",
+      "path": "/services/{id}/documents/{docId}/download",
+      "summary": "Télécharger un document (redirection 302 vers Cloudinary)",
+      "access": "authenticated",
+      "authRequired": true,
+      "pathParams": {
+        "id": { "type": "string", "format": "uuid", "required": true },
+        "docId": { "type": "string", "format": "uuid", "required": true }
+      },
+      "responses": {
+        "302": { "description": "Redirection vers Cloudinary", "headers": { "Location": { "type": "string", "format": "uri" } } },
+        "404": { "description": "Service ou document introuvable" }
+      },
+      "example": {
+        "ts": "async function downloadDocument(serviceId, docId) {\n  const res = await fetch(`/api/services/${serviceId}/documents/${docId}/download`, {\n    headers: { Authorization: `Bearer ${token}` },\n    redirect: 'follow'\n  });\n  const blob = await res.blob();\n  const url = URL.createObjectURL(blob);\n  const a = document.createElement('a');\n  a.href = url; a.download = 'document.pdf'; a.click();\n  URL.revokeObjectURL(url);\n}"
+      }
+    },
+    {
+      "id": "services.deleteDocument",
+      "method": "DELETE",
+      "path": "/services/{id}/documents/{docId}",
+      "summary": "Supprimer un document (admin, BDD + Cloudinary)",
+      "access": "admin",
+      "authRequired": true,
+      "pathParams": {
+        "id": { "type": "string", "format": "uuid", "required": true },
+        "docId": { "type": "string", "format": "uuid", "required": true }
+      },
+      "responses": {
+        "204": { "description": "Document supprimé" },
+        "403": { "description": "Rôle non-admin" },
+        "404": { "description": "Service ou document introuvable" }
+      }
+    }
+  ],
+  "$defs": {
+    "user": {
+      "type": "object",
+      "required": ["id", "email", "name", "role"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "email": { "type": "string", "format": "email" },
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "user"] }
+      }
+    },
+    "loginResponse": {
+      "type": "object",
+      "required": ["accessToken", "user"],
+      "properties": {
+        "accessToken": { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." },
+        "user": { "$ref": "#/$defs/user" }
+      }
+    },
+    "service": {
+      "type": "object",
+      "required": ["id", "name", "description", "developers", "techStack", "documents", "createdAt", "updatedAt"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "name": { "type": "string", "example": "Portail RH" },
+        "description": { "type": "string" },
+        "githubUrl": { "type": ["string", "null"], "format": "uri" },
+        "liveUrl": { "type": ["string", "null"], "format": "uri" },
+        "uatUrl": { "type": ["string", "null"], "format": "uri" },
+        "firstDeployedAt": { "type": ["string", "null"], "format": "date-time" },
+        "lastDeployedAt": { "type": ["string", "null"], "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "developers": { "type": "array", "items": { "type": "string" } },
+        "techStack": { "type": "array", "items": { "type": "string" } },
+        "documents": { "type": "array", "items": { "$ref": "#/$defs/document" } }
+      }
+    },
+    "document": {
+      "type": "object",
+      "required": ["id", "originalName", "cloudinaryUrl"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "originalName": { "type": "string", "example": "arch.pdf" },
+        "cloudinaryUrl": { "type": "string", "format": "uri" }
+      }
+    },
+    "paginatedServices": {
+      "type": "object",
+      "required": ["data", "meta"],
+      "properties": {
+        "data": { "type": "array", "items": { "$ref": "#/$defs/service" } },
+        "meta": {
+          "type": "object",
+          "properties": {
+            "total": { "type": "integer" },
+            "page": { "type": "integer" },
+            "limit": { "type": "integer" },
+            "totalPages": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "healthResponse": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "string", "example": "ok" },
+        "info": { "type": "object" },
+        "error": { "type": "object" },
+        "details": { "type": "object" }
+      }
+    },
+    "apiError": {
+      "type": "object",
+      "required": ["statusCode", "message"],
+      "properties": {
+        "statusCode": { "type": "integer", "example": 400 },
+        "message": { "oneOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }] },
+        "error": { "type": "string", "example": "Bad Request" }
+      }
+    },
+    "validationError": {
+      "type": "object",
+      "properties": {
+        "statusCode": { "type": "integer", "example": 400 },
+        "message": { "type": "array", "items": { "type": "string" }, "description": "Un message par champ invalide" },
+        "error": { "type": "string", "example": "Bad Request" }
+      }
+    }
+  },
+  "errors": {
+    "format": {
+      "type": "object",
+      "required": ["statusCode", "message"],
+      "properties": {
+        "statusCode": { "type": "integer" },
+        "message": { "oneOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }] },
+        "error": { "type": "string" }
+      }
+    },
+    "codes": {
+      "200": { "meaning": "OK", "context": "GET, PATCH réussis" },
+      "201": { "meaning": "Created", "context": "POST réussi" },
+      "204": { "meaning": "No Content", "context": "DELETE réussi" },
+      "400": { "meaning": "Bad Request", "context": "Validation DTO, format fichier, Too many files" },
+      "401": { "meaning": "Unauthorized", "context": "Token JWT manquant, expiré, invalide" },
+      "403": { "meaning": "Forbidden", "context": "Rôle insuffisant (admin requis)" },
+      "404": { "meaning": "Not Found", "context": "Ressource inexistante" },
+      "429": { "meaning": "Too Many Requests", "context": "Rate limit dépassé" },
+      "500": { "meaning": "Internal Server Error", "context": "Bug serveur, BDD down" },
+      "503": { "meaning": "Service Unavailable", "context": "Health check échoué" }
+    }
+  },
+  "metadata": {
+    "totalEndpoints": 11,
+    "byMethod": { "GET": 5, "POST": 2, "PATCH": 1, "DELETE": 3 },
+    "byAccess": { "public": 2, "authenticated": 6, "admin": 3 },
+    "byModule": { "auth": 2, "health": 1, "services": 8 }
+  }
+}

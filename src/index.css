@@ -1,0 +1,203 @@
+@import 'tailwindcss';
+
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* Conteneur centré : largeur max. 1440 px, marges latérales 1 / 1.5 / 2 rem. */
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= --theme(--breakpoint-sm)) {
+    max-width: none;
+    padding-inline: 1.5rem;
+  }
+  @media (width >= --theme(--breakpoint-lg)) {
+    padding-inline: 2rem;
+  }
+  @media (width >= 1440px) {
+    max-width: 1440px;
+  }
+}
+
+@theme {
+  --font-sans:
+    Inter, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+
+  --color-brand: #e60000;
+  --color-brand-dark: #b00000;
+  --color-brand-ink: #111111;
+  --color-brand-foreground: #ffffff;
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-success: hsl(var(--success));
+  --color-warning: hsl(var(--warning));
+  --color-neutral: hsl(var(--neutral));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-elevated: 0 16px 32px -12px rgb(16 24 40 / 0.16), 0 2px 6px -2px rgb(16 24 40 / 0.06);
+  --shadow-brand: 0 8px 20px -6px rgb(230 0 0 / 0.45);
+
+  --animate-fade-up: fade-up 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@utility bg-dots {
+  /* Trame de points discrète utilisée en arrière-plan des bandeaux. */
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+/*
+ * Charte Vodacom — valeurs HSL consommées par Tailwind & shadcn/ui.
+ * Rouge Vodacom #E60000 = hsl(0 100% 45%)
+ */
+@layer base {
+  /* Valeurs exactes du cahier des charges (section 3 — Identité visuelle). */
+  :root {
+    --background: 210 17% 98%; /* #F8F9FA — gris très clair */
+    --foreground: 0 0% 7%; /* #111111 — noir profond */
+    --card: 0 0% 100%; /* #FFFFFF — cartes blanches */
+    --card-foreground: 0 0% 7%; /* #111111 */
+    --popover: 0 0% 100%; /* #FFFFFF */
+    --popover-foreground: 0 0% 7%; /* #111111 */
+    --primary: 0 100% 45%; /* #E60000 — Brand Red */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF */
+    --secondary: 210 17% 98%; /* #F8F9FA */
+    --secondary-foreground: 0 0% 20%; /* #333333 — gris foncé */
+    --muted: 210 17% 98%; /* #F8F9FA */
+    --muted-foreground: 0 0% 20%; /* #333333 */
+    --accent: 210 17% 98%; /* #F8F9FA */
+    --accent-foreground: 0 0% 7%; /* #111111 */
+    --destructive: 0 100% 45%; /* #E60000 */
+    --destructive-foreground: 0 0% 100%;
+    /* Statuts (badges + graphiques) — validés daltonisme / contraste sur #FFFFFF */
+    --success: 152 62% 32%; /* #1F8455 — en production */
+    --warning: 26 90% 37%; /* #B45309 — UAT */
+    --neutral: 240 4% 46%; /* #71717A — non déployé */
+    --border: 220 13% 91%; /* #E5E7EB — bordures subtiles */
+    --input: 220 13% 91%; /* #E5E7EB */
+    --ring: 0 100% 45%; /* #E60000 */
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 240 9% 6%; /* #0F0F12 — noir charbon */
+    --foreground: 0 0% 98%; /* #FAFAFA — blanc cassé */
+    --card: 240 4% 16%; /* #27272A — surfaces / cartes */
+    --card-foreground: 0 0% 98%; /* #FAFAFA */
+    --popover: 240 4% 16%; /* #27272A */
+    --popover-foreground: 0 0% 98%; /* #FAFAFA */
+    --primary: 0 100% 45%; /* #E60000 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 6% 10%; /* #18181B */
+    --secondary-foreground: 0 0% 98%; /* #FAFAFA */
+    --muted: 240 6% 10%; /* #18181B */
+    --muted-foreground: 240 5% 65%; /* #A1A1AA — gris clair */
+    --accent: 240 5% 26%; /* #3F3F46 */
+    --accent-foreground: 0 0% 98%; /* #FAFAFA */
+    --destructive: 0 100% 45%; /* #E60000 */
+    --destructive-foreground: 0 0% 100%;
+    /* Statuts — validés sur la surface des cartes #27272A */
+    --success: 151 55% 40%; /* #2E9E68 */
+    --warning: 40 100% 39%; /* #C98500 */
+    --neutral: 240 4% 46%; /* #71717A */
+    --border: 240 5% 26%; /* #3F3F46 */
+    --input: 240 5% 26%; /* #3F3F46 */
+    --ring: 0 100% 45%; /* #E60000 */
+  }
+
+  /* Tailwind 4 : couleur de bordure par défaut = charte (et non currentColor). */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    @apply border-border;
+  }
+
+  /* Tailwind 4 : les boutons n'ont plus le curseur « main » par défaut. */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-background text-foreground min-h-screen font-sans antialiased;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    /* Halo de marque très discret derrière l'en-tête de page */
+    background-image:
+      radial-gradient(56rem 28rem at 100% -6rem, hsl(var(--primary) / 0.06), transparent 70%),
+      radial-gradient(40rem 22rem at 0% -8rem, hsl(var(--primary) / 0.03), transparent 70%);
+    background-repeat: no-repeat;
+  }
+
+  .dark body {
+    background-image:
+      radial-gradient(56rem 28rem at 100% -6rem, hsl(var(--primary) / 0.12), transparent 70%),
+      radial-gradient(40rem 22rem at 0% -8rem, hsl(var(--primary) / 0.05), transparent 70%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  ::selection {
+    @apply bg-primary/20;
+  }
+
+  :focus-visible {
+    @apply outline-hidden;
+  }
+}
