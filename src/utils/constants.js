@@ -79,6 +79,8 @@ export const OTP_RESEND_SECONDS = 30;
 export const ROUTES = {
   home: '/',
   login: '/login',
+  signup: '/signup',
+  forgotPassword: '/forgot-password',
   applications: '/applications',
   technologies: '/technologies',
   developers: '/developers',

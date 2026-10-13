@@ -7,6 +7,8 @@ import { useApplyTheme } from '@/hooks/useTheme';
 import { ROUTES } from '@/utils/constants';
 
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
+const RegisterPage = lazy(() => import('@/pages/RegisterPage'));
+const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage'));
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
 const ApplicationsPage = lazy(() => import('@/pages/ApplicationsPage'));
 const TechnologiesPage = lazy(() => import('@/pages/TechnologiesPage'));
@@ -22,6 +24,8 @@ export default function App() {
       <Routes>
         <Route element={<PublicOnlyRoute />}>
           <Route path={ROUTES.login} element={<LoginPage />} />
+          <Route path={ROUTES.signup} element={<RegisterPage />} />
+          <Route path={ROUTES.forgotPassword} element={<ForgotPasswordPage />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>

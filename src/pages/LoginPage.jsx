@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowRight, Eye, EyeOff, Info, Loader2, Lock, Mail, ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { ConfirmIdentity } from '@/components/auth/ConfirmIdentity';
@@ -232,6 +232,15 @@ export default function LoginPage() {
                       )}
                     </FormField>
 
+                    <div className="flex justify-end">
+                      <Link
+                        to={ROUTES.forgotPassword}
+                        className="text-primary text-xs font-semibold hover:underline"
+                      >
+                        {t('auth.forgotPassword')}
+                      </Link>
+                    </div>
+
                     <Button
                       type="submit"
                       size="xl"
@@ -250,6 +259,16 @@ export default function LoginPage() {
                         </>
                       )}
                     </Button>
+
+                    <p className="text-muted-foreground flex items-center justify-center gap-1.5 text-sm">
+                      <span>{t('auth.signupPrompt')}</span>
+                      <Link
+                        to={ROUTES.signup}
+                        className="text-primary font-semibold hover:underline"
+                      >
+                        {t('auth.signupCta')}
+                      </Link>
+                    </p>
                   </form>
 
                   {USE_MOCK_API && (

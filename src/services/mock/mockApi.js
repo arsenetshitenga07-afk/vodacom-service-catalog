@@ -133,6 +133,53 @@ export const mockAuthApi = {
     }
     return { token: `mock-${uid()}`, user: { id: 'mock-user', name: displayName(email), email } };
   },
+
+  /**
+   * Démo : aucun e-mail n'est réellement envoyé. Le code est renvoyé à l'appelant
+   * (`demoCode`) pour pouvoir l'afficher ; l'API réelle ne le renvoie jamais.
+   */
+  async register({ name, email, password }) {
+    await wait();
+    if (!email || !password) {
+      throw new ApiError('Invalid payload', { status: 422 });
+    }
+    if (password.length < 8) {
+      throw new ApiError('Password too short', { status: 422 });
+    }
+    return {
+      token: `mock-${uid()}`,
+      user: { id: 'mock-user', name: name?.trim() || displayName(email), email },
+    };
+  },
+
+  /**
+   * Démo : génère un code à `OTP_LENGTH` chiffres, le mémorise, et le renvoie pour affichage.
+   * L'API réelle n'expose jamais le code.
+   */
+  async requestPasswordReset({ email }) {
+    await wait();
+    if (!email) throw new ApiError('Invalid payload', { status: 422 });
+    const code = String(Math.floor(Math.random() * 10_000)).padStart(OTP_LENGTH, '0');
+    pendingCodes.set(`reset:${email.toLowerCase()}`, {
+      code,
+      expiresAt: Date.now() + OTP_TTL_MINUTES * 60 * 1000,
+    });
+    return { demoCode: code };
+  },
+
+  async resetPassword({ email, code, newPassword }) {
+    await wait();
+    if (!newPassword || newPassword.length < 8) {
+      throw new ApiError('Password too short', { status: 422 });
+    }
+    const entry = pendingCodes.get(`reset:${email.toLowerCase()}`);
+    if (!entry || entry.expiresAt < Date.now()) {
+      throw new ApiError('Code expired', { status: 410 });
+    }
+    if (entry.code !== code) throw new ApiError('Invalid code', { status: 401 });
+    pendingCodes.delete(`reset:${email.toLowerCase()}`);
+    return { ok: true };
+  },
 };
 
 export const mockServicesApi = {

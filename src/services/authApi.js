@@ -45,4 +45,25 @@ export const authApi = {
   async changePassword({ currentPassword, newPassword }) {
     await httpClient.post(API_ENDPOINTS.auth.changePassword, { currentPassword, newPassword });
   },
+
+  /** Crée un compte et ouvre immédiatement la session. */
+  async register({ name, email, password }) {
+    const { data } = await httpClient.post(API_ENDPOINTS.auth.register, { name, email, password });
+    const session = mapSessionFromApi(data);
+    if (!session.token) {
+      throw new ApiError('Missing access token in register response');
+    }
+    return { ...session, user: session.user ?? { id: '', name, email } };
+  },
+
+  /** Envoie un code de réinitialisation à l'adresse e-mail fournie. */
+  async requestPasswordReset({ email }) {
+    const { data } = await httpClient.post(API_ENDPOINTS.auth.requestPasswordReset, { email });
+    return data ?? null;
+  },
+
+  /** Valide le code et enregistre le nouveau mot de passe. */
+  async resetPassword({ email, code, newPassword }) {
+    await httpClient.post(API_ENDPOINTS.auth.resetPassword, { email, code, newPassword });
+  },
 };

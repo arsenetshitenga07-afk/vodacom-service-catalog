@@ -29,6 +29,9 @@ export const API_ENDPOINTS = {
     changePassword: '/auth/change-password', // POST { currentPassword, newPassword } → 204
     sendCode: '/auth/send-code', // POST { email } → 204 (code à 4 chiffres par e-mail)
     verifyCode: '/auth/verify-code', // POST { email, code } → { accessToken, user }
+    register: '/auth/register', // POST { name, email, password } → 201 { accessToken, user }
+    requestPasswordReset: '/auth/forgot-password', // POST { email } → 204
+    resetPassword: '/auth/reset-password', // POST { email, code, newPassword } → 204
   },
   health: '/health', // GET → { status: 'ok' } | 503
   services: {
@@ -59,4 +62,8 @@ export const FEATURES = {
   changePassword: USE_MOCK_API || flag('VITE_FEATURE_CHANGE_PASSWORD'),
   /** Champ « Département » sur les services (non prévu par le schéma `service`). */
   departments: USE_MOCK_API || flag('VITE_FEATURE_DEPARTMENTS'),
+  /** Inscription publique de compte (/auth/register). Réservé à un futur portail ouvert. */
+  selfSignup: USE_MOCK_API || flag('VITE_FEATURE_SELF_SIGNUP'),
+  /** Mot de passe oublié : envoi de code puis réinitialisation (/auth/forgot-password + /auth/reset-password). */
+  passwordReset: USE_MOCK_API || flag('VITE_FEATURE_PASSWORD_RESET'),
 };
