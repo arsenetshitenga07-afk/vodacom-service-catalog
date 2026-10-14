@@ -35,6 +35,7 @@ npm run dev        # serveur de développement → ouvrir l'adresse affichée da
 | `npm run build`   | Build de production dans `dist/`                          |
 | `npm run preview` | Sert le build de production (le plus rapide pour une démo) |
 | `npm run lint`    | Vérification ESLint                                       |
+| `npm test`        | Tests automatisés (Vitest)                                |
 | `npm run format`  | Formatage Prettier                                        |
 
 > Si le port 5173 est déjà occupé, Vite prend le suivant (5174, 5175…). Ouvrez toujours **l'adresse exacte affichée dans le terminal**.
@@ -188,6 +189,15 @@ Ces éléments ne figurent pas dans le cahier des charges. Ils améliorent le co
 - [x] Responsive (mobile, tablette, desktop)
 - [x] Accessibilité : libellés ARIA, navigation au clavier, focus visibles
 - [x] API simulée complète, avec 12 applications de démonstration
+- [x] **Page de détail d'une application** (`/applications/:id`) : clic sur le nom d'une application (cartes, tableau, tableau de bord, pages Technologies et Développeurs). Environnements et liens, chronologie des déploiements, équipe et technologies (liens vers le catalogue filtré), documents, boutons Modifier / Supprimer pour les administrateurs.
+- [x] **Gestion des technologies et des développeurs** (administrateurs) :
+  - « Ajouter une technologie » / « Ajouter un développeur » : nom + choix des applications concernées ;
+  - menu « ⋯ » sur chaque carte : **renommer partout** ou **retirer de toutes les applications** ;
+  - chaque application concernée est mise à jour (`PATCH /services/{id}` de la seule liste modifiée). Une application n'est jamais laissée sans développeur : elle est alors ignorée et signalée.
+- [x] **Inscription** (`/signup`) et **mot de passe oublié** (`/forgot-password`), activés par défaut avec le backend déployé.
+- [x] **Message « Accès en lecture seule »** pour les comptes collaborateurs (rôle `user`), qui explique l'absence des boutons de gestion.
+- [x] **Écran d'erreur** aux couleurs Vodacom (au lieu d'une page blanche) si un composant plante, avec « Recharger ».
+- [x] **Tests automatisés** (Vitest, `npm test`) : filtres et recherche, statut, statistiques, renommage / retrait en masse, conversion des données du backend et format du FormData.
 
 ### Ajouts retirés
 
@@ -202,23 +212,23 @@ Pour rester au plus près du cahier des charges, les éléments suivants ont ét
 
 ## 5. Reste à faire / pistes d'amélioration
 
-### 5.1 À finaliser
+### 5.1 Côté backend (bloquant)
+
+- [ ] **Remettre le backend Render en service** : au 15/10/2026, `GET /api/health` répond **503 Service Unavailable** (base de données injoignable). Tant qu'il est hors service, rien ne peut être enregistré.
+- [ ] **Créer un compte administrateur** : `/auth/register` crée des comptes `user` (lecture seule). Créer ou promouvoir un compte `role = admin` côté backend (seed ou base de données) pour pouvoir ajouter, modifier et supprimer.
+- [ ] **Gestion des utilisateurs** (liste des comptes, changement de rôle) : nécessite des routes backend absentes de `endpoints.json`.
+
+### 5.2 Côté frontend
 
 - [ ] Confirmation « Abandonner les modifications ? » à la fermeture d'un formulaire modifié
-- [ ] Tests avec le **vrai backend** (`VITE_USE_MOCK_API=false`) : routes, format des réponses, upload multipart
-
-### 5.2 Pistes d'amélioration
-
-- [ ] Tests automatisés (Vitest + React Testing Library)
+- [ ] Tests de composants (React Testing Library) en complément des tests unitaires
 - [ ] Tri des colonnes du tableau
 - [ ] Pagination ou recherche côté serveur pour un catalogue très volumineux
 - [ ] Barre de progression pendant l'upload des documents
 - [ ] Aperçu des documents (PDF, images) sans les télécharger
-- [ ] Rôles (administrateur / lecture seule) et organisation des applications par département
-- [ ] Fiche détaillée d'un service et indicateurs clés
 - [ ] Historique des modifications (qui a modifié quoi, et quand)
 - [ ] Export du catalogue (CSV / Excel)
-- [ ] Connexion unique (SSO / Azure AD) et « mot de passe oublié »
+- [ ] Connexion unique (SSO / Azure AD)
 - [ ] Conteneurisation (Dockerfile) et pipeline CI / CD
 
 ---
@@ -288,17 +298,21 @@ L'intégration a été vérifiée avec un serveur de test conforme à `endpoints
 src/
 ├── assets/                 # Logo Vodacom, motif de la page de connexion
 ├── components/
-│   ├── common/             # Avatar, EmptyState, FormField, PageLoader, RouteGuards
+│   ├── auth/               # ConfirmIdentity, OtpInput (connexion en deux étapes)
+│   ├── common/             # Avatar, EmptyState, ErrorBoundary, FormField, PageLoader, ReadOnlyNotice, RouteGuards
 │   ├── layout/             # AppLayout, Header, Logo, PageHero, ThemeToggle, LanguageSwitcher, UserMenu
+│   ├── dashboard/          # ChartCard, DeploymentsChart, TechnologiesChart, StatusChart
 │   ├── services/           # ServiceCard, ServiceTable, ServiceFormDialog, ServicesToolbar,
-│   │                       # FileUploader, TagInput, DeleteServiceDialog…
+│   │                       # FileUploader, TagInput, AttachToServicesDialog, ManageItemMenu…
 │   └── ui/                 # Composants shadcn/ui
 ├── hooks/                  # useAuth, useServices, useTheme, useDebouncedValue
 ├── i18n/                   # index.js, en.json, fr.json
-├── pages/                  # LoginPage, DashboardPage, ApplicationsPage, TechnologiesPage, DevelopersPage, NotFoundPage
+├── pages/                  # Login, Register, ForgotPassword, Dashboard, Applications, ServiceDetail,
+│                           # Technologies, Developers, Settings, NotFound
 ├── services/               # apiConfig, httpClient, authApi, servicesApi, mappers, mock/
 ├── store/                  # authStore, appStore (Zustand)
-└── utils/                  # constants, filterServices, format, serviceStatus, errors
+└── utils/                  # constants, filterServices, catalogStats, bulkListUpdate, format, …
+                            # (*.test.js : tests Vitest à côté du code testé)
 ```
 
 | Route           | Accès    | Contenu                                                        |
@@ -306,6 +320,7 @@ src/
 | `/login`        | Public   | Connexion                                                      |
 | `/`             | Connecté | Tableau de bord : chiffres clés, graphiques, derniers déploiements |
 | `/applications` | Connecté | Catalogue : recherche, filtres (`?tech=`, `?developer=`), ajout / édition / suppression |
+| `/applications/:id` | Connecté | Fiche détaillée d'une application                         |
 | `/technologies` | Connecté | Technologies et applications qui les utilisent                 |
 | `/developers`   | Connecté | Développeurs, leurs applications et technologies               |
 | `/settings`     | Connecté | Paramètres : profil, apparence, sécurité, données, session     |
@@ -325,4 +340,6 @@ src/
 - [x] **Étape 9 : retour au périmètre du cahier.** Retrait des rôles, des départements, des indicateurs, du filtre par statut et de la fiche détaillée ; un seul tableau de bord sur `/`.
 - [x] **Étape 10 : sécurité.** Migration vers Tailwind 4 (outil officiel `@tailwindcss/upgrade`) ; `npm audit` passe de 7 vulnérabilités à 0.
 - [x] **Étape 11 : graphiques.** Bandeau avec chiffres clés et tendance, trois graphiques de synthèse du catalogue.
-- [ ] **Étape 12 :** finaliser les points de la section 5.1.
+- [x] **Étape 12 : connexion au backend.** Alignement sur `endpoints.json`, proxy Vite, rôles, déploiement Vercel + backend Render.
+- [x] **Étape 13 : compléments.** Ajout / renommage / retrait des technologies et développeurs, page de détail d'une application, message de lecture seule, écran d'erreur, tests automatisés (17 tests).
+- [ ] **Étape 14 :** points côté backend de la section 5.1.

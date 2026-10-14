@@ -132,7 +132,12 @@ export default function DashboardPage() {
                   >
                     <ServiceAvatar name={service.name} className="size-9 rounded-lg text-xs" />
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-semibold">{service.name}</p>
+                      <Link
+                        to={ROUTES.applicationDetail(service.id)}
+                        className="hover:text-primary focus-visible:ring-ring block truncate rounded-sm text-sm font-semibold focus-visible:ring-2 focus-visible:outline-hidden"
+                      >
+                        {service.name}
+                      </Link>
                       <DepartmentLabel id={service.department} className="flex" />
                     </div>
                     <StatusBadge

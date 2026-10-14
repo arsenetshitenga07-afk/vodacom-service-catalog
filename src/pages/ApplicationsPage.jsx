@@ -3,6 +3,7 @@ import { AlertTriangle, Boxes, Code2, Plus, SearchX, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { EmptyState } from '@/components/common/EmptyState';
+import { ReadOnlyNotice } from '@/components/common/ReadOnlyNotice';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { DeleteServiceDialog } from '@/components/services/DeleteServiceDialog';
 import { ServiceCard } from '@/components/services/ServiceCard';
@@ -197,6 +198,8 @@ export default function ApplicationsPage() {
           )
         }
       />
+
+      <ReadOnlyNotice />
 
       {/* Filtre développeur (arrivée depuis la page Développeurs) */}
       {developer && (

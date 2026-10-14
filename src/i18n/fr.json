@@ -413,5 +413,86 @@
     "session": {
       "title": "Session"
     }
+  },
+  "readOnly": {
+    "title": "Accès en lecture seule.",
+    "description": "Votre compte a le rôle « Collaborateur » : seuls les administrateurs peuvent ajouter ou modifier des applications, technologies et développeurs."
+  },
+  "attach": {
+    "selected_one": "{{count}} sélectionnée",
+    "selected_other": "{{count}} sélectionnées",
+    "filter": "Filtrer les applications…",
+    "already": "Déjà ajouté",
+    "technology": {
+      "open": "Ajouter une technologie",
+      "title": "Ajouter une technologie",
+      "description": "Une technologie est rattachée aux applications : choisissez celles qui l’utilisent.",
+      "nameLabel": "Technologie",
+      "namePlaceholder": "ex. React, Docker, PostgreSQL",
+      "servicesLabel": "Applications qui l’utilisent",
+      "submit": "Ajouter la technologie",
+      "noTarget": "Sélectionnez au moins une application qui ne l’utilise pas encore.",
+      "success_one": "« {{name}} » ajoutée à {{count}} application.",
+      "success_other": "« {{name}} » ajoutée à {{count}} applications."
+    },
+    "developer": {
+      "open": "Ajouter un développeur",
+      "title": "Ajouter un développeur",
+      "description": "Un développeur est rattaché aux applications : choisissez celles sur lesquelles il travaille.",
+      "nameLabel": "Nom complet",
+      "namePlaceholder": "ex. Grace Mbuyi",
+      "servicesLabel": "Applications sur lesquelles il travaille",
+      "submit": "Ajouter le développeur",
+      "noTarget": "Sélectionnez au moins une application où ce développeur n’est pas encore.",
+      "success_one": "{{name}} ajouté à {{count}} application.",
+      "success_other": "{{name}} ajouté à {{count}} applications."
+    }
+  },
+  "crash": {
+    "title": "Une erreur est survenue",
+    "description": "Une erreur inattendue s’est produite à l’affichage de cette page. Rechargez pour continuer ; vos données ne sont pas perdues.",
+    "reload": "Recharger",
+    "home": "Retour au tableau de bord"
+  },
+  "manage": {
+    "rename": "Renommer",
+    "newName": "Nouveau nom",
+    "skipped": "Certaines applications n’ont pas été modifiées (nom déjà utilisé).",
+    "technology": {
+      "remove": "Retirer de toutes les applications",
+      "renameTitle": "Renommer « {{name}} »",
+      "renameDescription": "La technologie est renommée dans toutes les applications qui l’utilisent.",
+      "renamed_one": "« {{from}} » renommée en « {{to}} » dans {{count}} application.",
+      "renamed_other": "« {{from}} » renommée en « {{to}} » dans {{count}} applications.",
+      "removeTitle": "Retirer « {{name}} » ?",
+      "removeDescription_one": "« {{name}} » sera retirée de l’application qui l’utilise.",
+      "removeDescription_other": "« {{name}} » sera retirée des {{count}} applications qui l’utilisent.",
+      "removed_one": "« {{name}} » retirée de {{count}} application.",
+      "removed_other": "« {{name}} » retirée de {{count}} applications.",
+      "skippedLast": "Conservée là où c’est la seule technologie de l’application :"
+    },
+    "developer": {
+      "remove": "Retirer de toutes les applications",
+      "renameTitle": "Renommer {{name}}",
+      "renameDescription": "Le développeur est renommé dans toutes les applications sur lesquelles il travaille.",
+      "renamed_one": "{{from}} renommé en {{to}} dans {{count}} application.",
+      "renamed_other": "{{from}} renommé en {{to}} dans {{count}} applications.",
+      "removeTitle": "Retirer {{name}} ?",
+      "removeDescription_one": "{{name}} sera retiré de l’application sur laquelle il travaille.",
+      "removeDescription_other": "{{name}} sera retiré des {{count}} applications sur lesquelles il travaille.",
+      "removed_one": "{{name}} retiré de {{count}} application.",
+      "removed_other": "{{name}} retiré de {{count}} applications.",
+      "skippedLast": "Conservé là où il est le seul développeur (au moins un développeur est obligatoire) :"
+    }
+  },
+  "detail": {
+    "back": "Retour aux applications",
+    "notFound": "Application introuvable",
+    "notFoundDescription": "Cette application n’existe pas ou a été supprimée.",
+    "updated": "Mise à jour {{date}}",
+    "environments": "Environnements & liens",
+    "deployments": "Déploiements",
+    "noStack": "Aucune technologie renseignée",
+    "otherApps": "Voir toutes les applications de {{name}}"
   }
 }

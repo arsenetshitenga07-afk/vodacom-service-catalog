@@ -82,6 +82,7 @@ export const ROUTES = {
   signup: '/signup',
   forgotPassword: '/forgot-password',
   applications: '/applications',
+  applicationDetail: (id = ':id') => `/applications/${id}`,
   technologies: '/technologies',
   developers: '/developers',
   settings: '/settings',

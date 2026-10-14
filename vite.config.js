@@ -35,6 +35,11 @@ export default defineConfig(({ mode }) => {
         '/api': { target: apiTarget, changeOrigin: true },
       },
     },
+    // Tests (Vitest) : environnement navigateur simulé pour localStorage / document.
+    test: {
+      environment: 'jsdom',
+      include: ['src/**/*.test.{js,jsx}'],
+    },
     build: {
       rollupOptions: {
         output: {

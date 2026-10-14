@@ -1,13 +1,18 @@
 import { useMemo, useState } from 'react';
-import { ArrowRight, Code2, Search, SearchX } from 'lucide-react';
+import { ArrowRight, Plus, Code2, Search, SearchX } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { EmptyState } from '@/components/common/EmptyState';
+import { ReadOnlyNotice } from '@/components/common/ReadOnlyNotice';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { AttachToServicesDialog } from '@/components/services/AttachToServicesDialog';
+import { ManageItemMenu } from '@/components/services/ManageItemMenu';
+import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useServicesQuery } from '@/hooks/useServices';
+import { selectCanManage, useAuthStore } from '@/store/authStore';
 import { developerDirectory } from '@/utils/catalogStats';
 import { ROUTES } from '@/utils/constants';
 import { getInitials } from '@/utils/format';
@@ -19,6 +24,8 @@ export default function DevelopersPage() {
   const { t } = useTranslation();
   const { data: services = [], isPending } = useServicesQuery();
   const [search, setSearch] = useState('');
+  const [attachOpen, setAttachOpen] = useState(false);
+  const canManage = useAuthStore(selectCanManage);
 
   const developers = useMemo(() => developerDirectory(services), [services]);
   const query = search.trim().toLowerCase();
@@ -38,7 +45,18 @@ export default function DevelopersPage() {
             ? t('common.loading')
             : t('pages.developers.subtitle', { count: developers.length })
         }
+        action={
+          canManage &&
+          !isPending && (
+            <Button onClick={() => setAttachOpen(true)} className="shadow-brand">
+              <Plus />
+              {t('attach.developer.open')}
+            </Button>
+          )
+        }
       />
+
+      <ReadOnlyNotice />
 
       <div className="bg-card shadow-card rounded-2xl border p-3">
         <div className="relative">
@@ -82,12 +100,15 @@ export default function DevelopersPage() {
                     <span className="from-primary to-brand-dark text-primary-foreground grid size-12 shrink-0 place-items-center rounded-full bg-linear-to-br text-sm font-semibold">
                       {getInitials(dev.name)}
                     </span>
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <h2 className="truncate text-base font-semibold">{dev.name}</h2>
                       <p className="text-muted-foreground text-xs">
                         {t('pages.developers.appCount', { count: dev.services.length })}
                       </p>
                     </div>
+                    {canManage && (
+                      <ManageItemMenu kind="developer" name={dev.name} services={services} />
+                    )}
                   </header>
 
                   <div className="mt-4">
@@ -101,7 +122,12 @@ export default function DevelopersPage() {
                             className="bg-primary size-1.5 shrink-0 rounded-full"
                             aria-hidden="true"
                           />
-                          <span className="truncate">{service.name}</span>
+                          <Link
+                            to={ROUTES.applicationDetail(service.id)}
+                            className="hover:text-primary focus-visible:ring-ring truncate rounded-sm focus-visible:ring-2 focus-visible:outline-hidden"
+                          >
+                            {service.name}
+                          </Link>
                         </li>
                       ))}
                     </ul>
@@ -142,6 +168,14 @@ export default function DevelopersPage() {
           })}
         </ul>
       )}
+
+      <AttachToServicesDialog
+        kind="developer"
+        open={attachOpen}
+        onOpenChange={setAttachOpen}
+        services={services}
+        suggestions={developers.map((item) => item.name)}
+      />
     </div>
   );
 }

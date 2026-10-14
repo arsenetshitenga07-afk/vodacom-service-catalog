@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { AvatarStack, ServiceAvatar } from '@/components/common/Avatar';
 import { Badge } from '@/components/ui/badge';
-import { MAX_DOCUMENTS } from '@/utils/constants';
+import { MAX_DOCUMENTS, ROUTES } from '@/utils/constants';
 import { formatDate, formatRelativeDate } from '@/utils/format';
 import { getServiceStatus } from '@/utils/serviceStatus';
 import { DocumentLink } from './ServiceCard';
@@ -64,9 +65,13 @@ export function ServiceTable({ services, onEdit, onDelete }) {
                     <div className="flex items-center gap-3">
                       <ServiceAvatar name={service.name} className="size-9 rounded-lg text-xs" />
                       <div className="min-w-0">
-                        <p className="truncate font-semibold" title={service.name}>
+                        <Link
+                          to={ROUTES.applicationDetail(service.id)}
+                          className="hover:text-primary focus-visible:ring-ring block truncate rounded-sm font-semibold focus-visible:ring-2 focus-visible:outline-hidden"
+                          title={service.name}
+                        >
                           {service.name}
-                        </p>
+                        </Link>
                         <p
                           className="text-muted-foreground truncate text-xs"
                           title={service.description}

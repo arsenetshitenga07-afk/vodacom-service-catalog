@@ -413,5 +413,86 @@
     "session": {
       "title": "Session"
     }
+  },
+  "readOnly": {
+    "title": "Read-only access.",
+    "description": "Your account has the “Employee” role: only administrators can add or edit applications, technologies and developers."
+  },
+  "attach": {
+    "selected_one": "{{count}} selected",
+    "selected_other": "{{count}} selected",
+    "filter": "Filter applications…",
+    "already": "Already added",
+    "technology": {
+      "open": "Add a technology",
+      "title": "Add a technology",
+      "description": "Technologies belong to applications: choose the ones that use it.",
+      "nameLabel": "Technology",
+      "namePlaceholder": "e.g. React, Docker, PostgreSQL",
+      "servicesLabel": "Applications using it",
+      "submit": "Add technology",
+      "noTarget": "Select at least one application that does not use it yet.",
+      "success_one": "“{{name}}” added to {{count}} application.",
+      "success_other": "“{{name}}” added to {{count}} applications."
+    },
+    "developer": {
+      "open": "Add a developer",
+      "title": "Add a developer",
+      "description": "Developers are attached to applications: choose the ones they work on.",
+      "nameLabel": "Full name",
+      "namePlaceholder": "e.g. Grace Mbuyi",
+      "servicesLabel": "Applications they work on",
+      "submit": "Add developer",
+      "noTarget": "Select at least one application this developer is not on yet.",
+      "success_one": "{{name}} added to {{count}} application.",
+      "success_other": "{{name}} added to {{count}} applications."
+    }
+  },
+  "crash": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred while displaying this page. Reload to continue; your data is safe.",
+    "reload": "Reload",
+    "home": "Back to dashboard"
+  },
+  "manage": {
+    "rename": "Rename",
+    "newName": "New name",
+    "skipped": "Some applications were not changed (name already used).",
+    "technology": {
+      "remove": "Remove from all applications",
+      "renameTitle": "Rename “{{name}}”",
+      "renameDescription": "The technology is renamed in every application that uses it.",
+      "renamed_one": "“{{from}}” renamed to “{{to}}” in {{count}} application.",
+      "renamed_other": "“{{from}}” renamed to “{{to}}” in {{count}} applications.",
+      "removeTitle": "Remove “{{name}}”?",
+      "removeDescription_one": "“{{name}}” will be removed from the {{count}} application that uses it.",
+      "removeDescription_other": "“{{name}}” will be removed from the {{count}} applications that use it.",
+      "removed_one": "“{{name}}” removed from {{count}} application.",
+      "removed_other": "“{{name}}” removed from {{count}} applications.",
+      "skippedLast": "Kept where it is the only technology of the application:"
+    },
+    "developer": {
+      "remove": "Remove from all applications",
+      "renameTitle": "Rename {{name}}",
+      "renameDescription": "The developer is renamed in every application they work on.",
+      "renamed_one": "{{from}} renamed to {{to}} in {{count}} application.",
+      "renamed_other": "{{from}} renamed to {{to}} in {{count}} applications.",
+      "removeTitle": "Remove {{name}}?",
+      "removeDescription_one": "{{name}} will be removed from the {{count}} application they work on.",
+      "removeDescription_other": "{{name}} will be removed from the {{count}} applications they work on.",
+      "removed_one": "{{name}} removed from {{count}} application.",
+      "removed_other": "{{name}} removed from {{count}} applications.",
+      "skippedLast": "Kept where they are the only developer (at least one developer is required):"
+    }
+  },
+  "detail": {
+    "back": "Back to applications",
+    "notFound": "Application not found",
+    "notFoundDescription": "This application does not exist or has been deleted.",
+    "updated": "Updated {{date}}",
+    "environments": "Environments & links",
+    "deployments": "Deployments",
+    "noStack": "No technology listed",
+    "otherApps": "See all applications of {{name}}"
   }
 }

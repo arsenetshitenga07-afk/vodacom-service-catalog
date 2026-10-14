@@ -210,9 +210,13 @@ export const mockServicesApi = {
     const kept = services[index].documents.filter((doc) => !removedDocumentIds.includes(doc.id));
     assertDocumentLimit(kept.length + documents.length);
 
+    // Mise à jour partielle, comme PATCH côté backend : seuls les champs envoyés changent.
+    const sentFields = Object.fromEntries(
+      Object.entries(fields).filter(([key]) => formData.has(key)),
+    );
     const updated = {
       ...services[index],
-      ...fields,
+      ...sentFields,
       documents: [...kept, ...documents],
       updatedAt: new Date().toISOString(),
     };

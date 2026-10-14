@@ -189,11 +189,11 @@ export default function ForgotPasswordPage() {
           <Logo inverse />
         </div>
         <div className="relative space-y-5">
-          <span className="bg-white/15 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium backdrop-blur-sm">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-medium backdrop-blur-sm">
             <KeyRound className="size-3.5" aria-hidden="true" />
             {t('app.name')}
           </span>
-          <h1 className="text-4xl font-bold leading-tight tracking-tight xl:text-5xl">
+          <h1 className="text-4xl leading-tight font-bold tracking-tight xl:text-5xl">
             {t('auth.forgot.title')}
           </h1>
           <p className="max-w-md text-base text-white/85">{t('auth.forgot.subtitle')}</p>
@@ -341,7 +341,11 @@ export default function ForgotPasswordPage() {
                           }
                           aria-pressed={showPassword}
                         >
-                          {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                          {showPassword ? (
+                            <EyeOff className="size-4" />
+                          ) : (
+                            <Eye className="size-4" />
+                          )}
                         </button>
                       </div>
                     )}
@@ -405,9 +409,7 @@ export default function ForgotPasswordPage() {
                       <Info className="text-warning mt-px size-4 shrink-0" aria-hidden="true" />
                       <span>
                         {t('auth.otp.demo')}{' '}
-                        <strong className="font-mono text-sm tracking-[0.3em]">
-                          {demoCode}
-                        </strong>
+                        <strong className="font-mono text-sm tracking-[0.3em]">{demoCode}</strong>
                       </span>
                     </p>
                   )}

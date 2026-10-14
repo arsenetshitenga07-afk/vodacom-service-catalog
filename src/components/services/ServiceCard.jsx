@@ -1,8 +1,9 @@
 import { CalendarClock, FileText, Rocket } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { AvatarStack, ServiceAvatar } from '@/components/common/Avatar';
 import { Badge } from '@/components/ui/badge';
-import { MAX_DOCUMENTS } from '@/utils/constants';
+import { MAX_DOCUMENTS, ROUTES } from '@/utils/constants';
 import { formatDate, formatRelativeDate } from '@/utils/format';
 import { getServiceStatus } from '@/utils/serviceStatus';
 import { DepartmentLabel } from './DepartmentLabel';
@@ -22,7 +23,12 @@ export function ServiceCard({ service, onEdit, onDelete }) {
             className="truncate text-[15px] leading-tight font-semibold tracking-tight"
             title={service.name}
           >
-            {service.name}
+            <Link
+              to={ROUTES.applicationDetail(service.id)}
+              className="hover:text-primary focus-visible:ring-ring rounded-sm focus-visible:ring-2 focus-visible:outline-hidden"
+            >
+              {service.name}
+            </Link>
           </h3>
           <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
             <StatusBadge status={getServiceStatus(service)} />

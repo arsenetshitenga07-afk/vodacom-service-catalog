@@ -1,13 +1,18 @@
 import { useMemo, useState } from 'react';
-import { ArrowRight, Layers, Search, SearchX } from 'lucide-react';
+import { ArrowRight, Plus, Layers, Search, SearchX } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ServiceAvatar } from '@/components/common/Avatar';
 import { EmptyState } from '@/components/common/EmptyState';
+import { ReadOnlyNotice } from '@/components/common/ReadOnlyNotice';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { AttachToServicesDialog } from '@/components/services/AttachToServicesDialog';
+import { ManageItemMenu } from '@/components/services/ManageItemMenu';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useServicesQuery } from '@/hooks/useServices';
+import { selectCanManage, useAuthStore } from '@/store/authStore';
 import { technologyUsage } from '@/utils/catalogStats';
 import { ROUTES } from '@/utils/constants';
 
@@ -18,6 +23,8 @@ export default function TechnologiesPage() {
   const { t } = useTranslation();
   const { data: services = [], isPending } = useServicesQuery();
   const [search, setSearch] = useState('');
+  const [attachOpen, setAttachOpen] = useState(false);
+  const canManage = useAuthStore(selectCanManage);
 
   const technologies = useMemo(() => technologyUsage(services), [services]);
   const filtered = technologies.filter((tech) =>
@@ -34,7 +41,18 @@ export default function TechnologiesPage() {
             ? t('common.loading')
             : t('pages.technologies.subtitle', { count: technologies.length })
         }
+        action={
+          canManage &&
+          !isPending && (
+            <Button onClick={() => setAttachOpen(true)} className="shadow-brand">
+              <Plus />
+              {t('attach.technology.open')}
+            </Button>
+          )
+        }
       />
+
+      <ReadOnlyNotice />
 
       <div className="bg-card shadow-card rounded-2xl border p-3">
         <div className="relative">
@@ -86,6 +104,9 @@ export default function TechnologiesPage() {
                         </p>
                       </div>
                     </div>
+                    {canManage && (
+                      <ManageItemMenu kind="technology" name={tech.name} services={services} />
+                    )}
                   </header>
 
                   <ul className="mt-4 flex-1 space-y-2">
@@ -95,7 +116,12 @@ export default function TechnologiesPage() {
                           name={service.name}
                           className="size-7 rounded-md text-[10px]"
                         />
-                        <span className="truncate">{service.name}</span>
+                        <Link
+                          to={ROUTES.applicationDetail(service.id)}
+                          className="hover:text-primary focus-visible:ring-ring truncate rounded-sm focus-visible:ring-2 focus-visible:outline-hidden"
+                        >
+                          {service.name}
+                        </Link>
                       </li>
                     ))}
                     {hidden > 0 && (
@@ -120,6 +146,14 @@ export default function TechnologiesPage() {
           })}
         </ul>
       )}
+
+      <AttachToServicesDialog
+        kind="technology"
+        open={attachOpen}
+        onOpenChange={setAttachOpen}
+        services={services}
+        suggestions={technologies.map((item) => item.name)}
+      />
     </div>
   );
 }

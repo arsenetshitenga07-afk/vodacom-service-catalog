@@ -11,6 +11,7 @@ const RegisterPage = lazy(() => import('@/pages/RegisterPage'));
 const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage'));
 const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
 const ApplicationsPage = lazy(() => import('@/pages/ApplicationsPage'));
+const ServiceDetailPage = lazy(() => import('@/pages/ServiceDetailPage'));
 const TechnologiesPage = lazy(() => import('@/pages/TechnologiesPage'));
 const DevelopersPage = lazy(() => import('@/pages/DevelopersPage'));
 const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
@@ -32,6 +33,7 @@ export default function App() {
           <Route element={<AppLayout />}>
             <Route path={ROUTES.home} element={<DashboardPage />} />
             <Route path={ROUTES.applications} element={<ApplicationsPage />} />
+            <Route path={ROUTES.applicationDetail()} element={<ServiceDetailPage />} />
             <Route path={ROUTES.technologies} element={<TechnologiesPage />} />
             <Route path={ROUTES.developers} element={<DevelopersPage />} />
             <Route path={ROUTES.settings} element={<SettingsPage />} />

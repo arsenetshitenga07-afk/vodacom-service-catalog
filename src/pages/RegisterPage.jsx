@@ -97,11 +97,11 @@ export default function RegisterPage() {
           <Logo inverse />
         </div>
         <div className="relative space-y-5">
-          <span className="bg-white/15 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium backdrop-blur-sm">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-medium backdrop-blur-sm">
             <UserPlus className="size-3.5" aria-hidden="true" />
             {t('app.name')}
           </span>
-          <h1 className="text-4xl font-bold leading-tight tracking-tight xl:text-5xl">
+          <h1 className="text-4xl leading-tight font-bold tracking-tight xl:text-5xl">
             {t('auth.register.title')}
           </h1>
           <p className="max-w-md text-base text-white/85">{t('auth.register.subtitle')}</p>
@@ -123,9 +123,7 @@ export default function RegisterPage() {
                   <UserPlus className="size-6" aria-hidden="true" />
                 </span>
                 <h2 className="text-xl font-bold tracking-tight">{t('auth.register.title')}</h2>
-                <p className="text-muted-foreground mt-1 text-sm">
-                  {t('auth.register.subtitle')}
-                </p>
+                <p className="text-muted-foreground mt-1 text-sm">{t('auth.register.subtitle')}</p>
               </div>
 
               <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -231,7 +229,7 @@ export default function RegisterPage() {
                   <input
                     type="checkbox"
                     {...register('accept')}
-                    className="text-primary focus-visible:ring-ring mt-0.5 size-3.5 shrink-0 rounded border-input"
+                    className="text-primary focus-visible:ring-ring border-input mt-0.5 size-3.5 shrink-0 rounded"
                     disabled={isPending}
                   />
                   <span>{t('auth.footer')}</span>
@@ -242,12 +240,7 @@ export default function RegisterPage() {
                   </p>
                 )}
 
-                <Button
-                  type="submit"
-                  size="xl"
-                  className="h-11 w-full"
-                  disabled={isPending}
-                >
+                <Button type="submit" size="xl" className="h-11 w-full" disabled={isPending}>
                   {isPending ? (
                     <>
                       <Loader2 className="animate-spin" />
