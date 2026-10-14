@@ -104,7 +104,7 @@ export default function LoginPage() {
   const year = new Date().getFullYear();
 
   return (
-    <div className="grid min-h-screen lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
+    <div className="grid h-screen overflow-hidden lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
       {/* Panneau de marque */}
       <aside className="bg-brand relative isolate hidden overflow-hidden text-white lg:flex lg:flex-col lg:justify-between lg:p-12 xl:p-16">
         {/* Motif de logos Vodacom répétés, en filigrane */}
@@ -139,8 +139,8 @@ export default function LoginPage() {
       </aside>
 
       {/* Formulaire */}
-      <main className="bg-background flex flex-col">
-        <div className="flex items-center justify-between p-4 sm:p-6">
+      <main className="bg-background flex flex-col overflow-hidden">
+        <div className="flex shrink-0 items-center justify-between p-4 sm:p-6">
           <Logo className="lg:invisible" />
           <div className="flex items-center gap-1">
             <LanguageSwitcher />
@@ -148,7 +148,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="flex flex-1 items-center justify-center px-4 pb-16 sm:px-6">
+        <div className="flex flex-1 items-center justify-center overflow-y-auto px-4 pb-10 sm:px-6 sm:pb-16">
           <div className="animate-fade-up w-full max-w-[460px]">
             <div className="border-t-primary bg-card shadow-elevated rounded-2xl border border-t-4 px-6 py-10 sm:px-10 sm:py-14">
               {pending ? (

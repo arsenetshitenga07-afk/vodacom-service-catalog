@@ -82,7 +82,7 @@ export default function RegisterPage() {
   const year = new Date().getFullYear();
 
   return (
-    <div className="grid min-h-screen lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
+    <div className="grid h-screen overflow-hidden lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
       <aside className="bg-brand relative isolate hidden overflow-hidden text-white lg:flex lg:flex-col lg:justify-between lg:p-12 xl:p-16">
         <div
           className="pointer-events-none absolute inset-0 -z-10 bg-cover bg-center opacity-[0.28]"
@@ -109,13 +109,13 @@ export default function RegisterPage() {
         <p className="relative text-xs text-white/70">{t('layout.copyright', { year })}</p>
       </aside>
 
-      <main className="bg-background flex flex-col">
-        <header className="flex items-center justify-end gap-1 px-6 pt-6 sm:px-10">
+      <main className="bg-background flex flex-col overflow-hidden">
+        <header className="flex shrink-0 items-center justify-end gap-1 px-6 pt-6 sm:px-10">
           <LanguageSwitcher />
           <ThemeToggle />
         </header>
 
-        <div className="flex flex-1 items-center justify-center px-6 py-10 sm:px-10">
+        <div className="flex flex-1 items-center justify-center overflow-y-auto px-6 py-6 sm:px-10 sm:py-10">
           <div className="w-full max-w-md">
             <div className="bg-card ring-border/60 rounded-2xl p-7 shadow-sm ring-1 sm:p-9">
               <div className="mb-7 flex flex-col items-center text-center">
