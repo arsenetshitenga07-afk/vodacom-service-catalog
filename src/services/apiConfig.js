@@ -24,10 +24,10 @@
  */
 const FALLBACK_API_BASE_URL = 'https://catalogue-portail-interne-des.onrender.com/api';
 
-export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || FALLBACK_API_BASE_URL).replace(
-  /\/+$/,
-  '',
-);
+export const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL ||
+  FALLBACK_API_BASE_URL
+).replace(/\/+$/, '');
 
 // Mode démo : `true` par défaut en dev (offline, aucune dépendance),
 // `false` en production (utilise l'API réelle). Override possible via
