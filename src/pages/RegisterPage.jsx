@@ -110,25 +110,25 @@ export default function RegisterPage() {
       </aside>
 
       <main className="bg-background flex flex-col overflow-hidden">
-        <header className="flex shrink-0 items-center justify-end gap-1 px-6 pt-6 sm:px-10">
+        <header className="flex shrink-0 items-center justify-end gap-1 px-6 pt-4 sm:px-10 sm:pt-5">
           <LanguageSwitcher />
           <ThemeToggle />
         </header>
 
-        <div className="flex flex-1 items-center justify-center overflow-y-auto px-6 py-6 sm:px-10 sm:py-10">
+        <div className="flex flex-1 items-center justify-center overflow-y-auto px-6 py-4 sm:px-10 sm:py-6">
           <div className="w-full max-w-md">
-            <div className="bg-card ring-border/60 rounded-2xl p-7 shadow-sm ring-1 sm:p-9">
-              <div className="mb-7 flex flex-col items-center text-center">
-                <span className="bg-primary/10 text-primary dark:bg-primary/20 mb-5 grid size-14 place-items-center rounded-2xl">
-                  <UserPlus className="size-7" aria-hidden="true" />
+            <div className="bg-card ring-border/60 rounded-2xl p-5 shadow-sm ring-1 sm:p-7">
+              <div className="mb-5 flex flex-col items-center text-center">
+                <span className="bg-primary/10 text-primary dark:bg-primary/20 mb-4 grid size-12 place-items-center rounded-2xl">
+                  <UserPlus className="size-6" aria-hidden="true" />
                 </span>
-                <h2 className="text-2xl font-bold tracking-tight">{t('auth.register.title')}</h2>
+                <h2 className="text-xl font-bold tracking-tight">{t('auth.register.title')}</h2>
                 <p className="text-muted-foreground mt-1 text-sm">
                   {t('auth.register.subtitle')}
                 </p>
               </div>
 
-              <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+              <form noValidate onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <FormField id="name" label={t('auth.register.name')} error={errors.name?.message}>
                   {(aria) => (
                     <div className="relative">
@@ -143,7 +143,7 @@ export default function RegisterPage() {
                         autoComplete="name"
                         placeholder={t('auth.register.namePlaceholder')}
                         disabled={isPending}
-                        className="h-12 pl-10"
+                        className="h-11 pl-10"
                       />
                     </div>
                   )}
@@ -163,7 +163,7 @@ export default function RegisterPage() {
                         autoComplete="email"
                         placeholder={t('auth.emailPlaceholder')}
                         disabled={isPending}
-                        className="h-12 pl-10"
+                        className="h-11 pl-10"
                       />
                     </div>
                   )}
@@ -188,7 +188,7 @@ export default function RegisterPage() {
                         autoComplete="new-password"
                         placeholder={t('auth.passwordPlaceholder')}
                         disabled={isPending}
-                        className="h-12 pr-11 pl-10"
+                        className="h-11 pr-11 pl-10"
                       />
                       <button
                         type="button"
@@ -221,17 +221,17 @@ export default function RegisterPage() {
                         autoComplete="new-password"
                         placeholder={t('auth.forgot.confirmPlaceholder')}
                         disabled={isPending}
-                        className="h-12 pl-10"
+                        className="h-11 pl-10"
                       />
                     </div>
                   )}
                 </FormField>
 
-                <label className="text-muted-foreground flex items-start gap-2 text-xs leading-relaxed">
+                <label className="text-muted-foreground flex items-start gap-2 text-xs leading-snug">
                   <input
                     type="checkbox"
                     {...register('accept')}
-                    className="text-primary focus-visible:ring-ring mt-0.5 size-4 rounded border-input"
+                    className="text-primary focus-visible:ring-ring mt-0.5 size-3.5 shrink-0 rounded border-input"
                     disabled={isPending}
                   />
                   <span>{t('auth.footer')}</span>
@@ -245,7 +245,7 @@ export default function RegisterPage() {
                 <Button
                   type="submit"
                   size="xl"
-                  className="h-12 w-full"
+                  className="h-11 w-full"
                   disabled={isPending}
                 >
                   {isPending ? (

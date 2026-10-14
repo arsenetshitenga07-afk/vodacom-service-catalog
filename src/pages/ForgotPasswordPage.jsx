@@ -190,24 +190,24 @@ export default function ForgotPasswordPage() {
       </aside>
 
       <main className="bg-background flex flex-col overflow-hidden">
-        <header className="flex shrink-0 items-center justify-end gap-1 px-6 pt-6 sm:px-10">
+        <header className="flex shrink-0 items-center justify-end gap-1 px-6 pt-4 sm:px-10 sm:pt-5">
           <LanguageSwitcher />
           <ThemeToggle />
         </header>
 
-        <div className="flex flex-1 items-center justify-center overflow-y-auto px-6 py-6 sm:px-10 sm:py-10">
+        <div className="flex flex-1 items-center justify-center overflow-y-auto px-6 py-4 sm:px-10 sm:py-6">
           <div className="w-full max-w-md">
-            <div className="bg-card ring-border/60 rounded-2xl p-7 shadow-sm ring-1 sm:p-9">
+            <div className="bg-card ring-border/60 rounded-2xl p-5 shadow-sm ring-1 sm:p-7">
               {/* En-tête commun */}
-              <div className="mb-7 flex flex-col items-center text-center">
-                <span className="bg-primary/10 text-primary dark:bg-primary/20 mb-5 grid size-14 place-items-center rounded-2xl">
+              <div className="mb-5 flex flex-col items-center text-center">
+                <span className="bg-primary/10 text-primary dark:bg-primary/20 mb-4 grid size-12 place-items-center rounded-2xl">
                   {step === 3 ? (
-                    <CheckCircle2 className="size-7" aria-hidden="true" />
+                    <CheckCircle2 className="size-6" aria-hidden="true" />
                   ) : (
-                    <KeyRound className="size-7" aria-hidden="true" />
+                    <KeyRound className="size-6" aria-hidden="true" />
                   )}
                 </span>
-                <h2 className="text-2xl font-bold tracking-tight">
+                <h2 className="text-xl font-bold tracking-tight">
                   {step === 3 ? t('auth.forgot.success') : t('auth.forgot.title')}
                 </h2>
                 <p className="text-muted-foreground mt-1 text-sm">{t('auth.forgot.subtitle')}</p>
@@ -218,7 +218,7 @@ export default function ForgotPasswordPage() {
                 <form
                   noValidate
                   onSubmit={emailForm.handleSubmit(onRequestCode)}
-                  className="space-y-5"
+                  className="space-y-4"
                 >
                   <FormField
                     id="forgot-email"
@@ -238,7 +238,7 @@ export default function ForgotPasswordPage() {
                           autoComplete="email"
                           placeholder={t('auth.emailPlaceholder')}
                           disabled={isRequestPending}
-                          className="h-12 pl-10"
+                          className="h-11 pl-10"
                         />
                       </div>
                     )}
@@ -247,7 +247,7 @@ export default function ForgotPasswordPage() {
                   <Button
                     type="submit"
                     size="xl"
-                    className="h-12 w-full"
+                    className="h-11 w-full"
                     disabled={isRequestPending}
                   >
                     {isRequestPending ? (
@@ -267,14 +267,14 @@ export default function ForgotPasswordPage() {
                 <form
                   noValidate
                   onSubmit={resetForm.handleSubmit(onSubmitNewPassword)}
-                  className="space-y-5"
+                  className="space-y-4"
                 >
-                  <div className="bg-muted mb-1 flex items-center gap-3 rounded-xl border px-4 py-3">
-                    <span className="from-primary to-brand-dark text-primary-foreground grid size-10 shrink-0 place-items-center rounded-full bg-linear-to-br">
-                      <MailCheck className="size-5" aria-hidden="true" />
+                  <div className="bg-muted mb-1 flex items-center gap-3 rounded-xl border px-4 py-2.5">
+                    <span className="from-primary to-brand-dark text-primary-foreground grid size-9 shrink-0 place-items-center rounded-full bg-linear-to-br">
+                      <MailCheck className="size-4" aria-hidden="true" />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-muted-foreground text-xs font-medium">
+                      <p className="text-muted-foreground text-[11px] font-medium">
                         {t('auth.forgot.step1Title')}
                       </p>
                       <p className="truncate text-sm font-semibold">{email}</p>
@@ -318,7 +318,7 @@ export default function ForgotPasswordPage() {
                           autoComplete="new-password"
                           placeholder={t('auth.forgot.newPasswordPlaceholder')}
                           disabled={isResetPending}
-                          className="h-12 pr-11 pl-10"
+                          className="h-11 pr-11 pl-10"
                         />
                         <button
                           type="button"
@@ -353,13 +353,13 @@ export default function ForgotPasswordPage() {
                           autoComplete="new-password"
                           placeholder={t('auth.forgot.confirmPlaceholder')}
                           disabled={isResetPending}
-                          className="h-12 pl-10"
+                          className="h-11 pl-10"
                         />
                       </div>
                     )}
                   </FormField>
 
-                  <Button type="submit" size="xl" className="h-12 w-full" disabled={isResetPending}>
+                  <Button type="submit" size="xl" className="h-11 w-full" disabled={isResetPending}>
                     {isResetPending ? (
                       <>
                         <Loader2 className="animate-spin" />

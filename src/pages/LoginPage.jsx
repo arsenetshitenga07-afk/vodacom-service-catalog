@@ -140,7 +140,7 @@ export default function LoginPage() {
 
       {/* Formulaire */}
       <main className="bg-background flex flex-col overflow-hidden">
-        <div className="flex shrink-0 items-center justify-between p-4 sm:p-6">
+        <div className="flex shrink-0 items-center justify-between p-4 sm:p-5">
           <Logo className="lg:invisible" />
           <div className="flex items-center gap-1">
             <LanguageSwitcher />
@@ -148,9 +148,9 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="flex flex-1 items-center justify-center overflow-y-auto px-4 pb-10 sm:px-6 sm:pb-16">
+        <div className="flex flex-1 items-center justify-center overflow-y-auto px-4 pb-6 sm:px-6 sm:pb-10">
           <div className="animate-fade-up w-full max-w-[460px]">
-            <div className="border-t-primary bg-card shadow-elevated rounded-2xl border border-t-4 px-6 py-10 sm:px-10 sm:py-14">
+            <div className="border-t-primary bg-card shadow-elevated rounded-2xl border border-t-4 px-6 py-7 sm:px-10 sm:py-9">
               {pending ? (
                 <ConfirmIdentity
                   email={pending.email}
@@ -161,16 +161,16 @@ export default function LoginPage() {
                 />
               ) : (
                 <>
-                  <div className="mb-10 space-y-2">
-                    <BrandMark className="mb-5 size-14" title="Vodacom" />
-                    <h2 className="text-2xl font-bold tracking-tight">{t('auth.title')}</h2>
+                  <div className="mb-7 space-y-1.5">
+                    <BrandMark className="mb-4 size-12" title="Vodacom" />
+                    <h2 className="text-xl font-bold tracking-tight">{t('auth.title')}</h2>
                     <p className="text-muted-foreground text-sm">{t('auth.formSubtitle')}</p>
                   </div>
 
                   <form
                     noValidate
                     onSubmit={handleSubmit((values) => loginMutation.mutate(values))}
-                    className="space-y-6"
+                    className="space-y-4"
                   >
                     <FormField id="email" label={t('auth.email')} error={errors.email?.message}>
                       {(aria) => (
@@ -244,7 +244,7 @@ export default function LoginPage() {
                     <Button
                       type="submit"
                       size="xl"
-                      className="mt-2 h-12 w-full"
+                      className="mt-2 h-11 w-full"
                       disabled={isPending}
                     >
                       {isPending ? (
