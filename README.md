@@ -233,14 +233,16 @@ Le frontend est aligné sur le contrat **`endpoints.json`** (Portal Vodacom API 
 2. Dans `.env` :
 
    ```env
+   API_BASE_URL=/api
    VITE_USE_MOCK_API=false
-   VITE_API_BASE_URL=/api
    VITE_API_PROXY_TARGET=http://localhost:3000
    ```
 
 3. Relancer `npm run dev`.
 
-En développement, Vite relaie les appels `/api` vers `VITE_API_PROXY_TARGET` (`server.proxy` dans `vite.config.js`), ce qui évite tout problème de **CORS**, quel que soit le port du frontend. En production, `VITE_API_BASE_URL` doit contenir l'URL complète (ex. `https://portal.vodacom.com/api`).
+**Note technique sur `API_BASE_URL` vs `VITE_API_BASE_URL`** : Vite n'expose au code client que les variables d'environnement préfixées par `VITE_`. La constante exportée s'appelle `API_BASE_URL` côté code, mais pour la surcharger via `.env` vous devez utiliser le nom `VITE_API_BASE_URL` (le préfixe est imposé par Vite, c'est une contrainte de l'outil). Le `.env.example` reflète cette réalité. La valeur par défaut est l'URL de prod (voir `src/services/apiConfig.js`).
+
+En développement, Vite relaie les appels `/api` vers `VITE_API_PROXY_TARGET` (`server.proxy` dans `vite.config.js`), ce qui évite tout problème de **CORS**, quel que soit le port du frontend. En production, `API_BASE_URL` (ou `VITE_API_BASE_URL` si surchargé) doit contenir l'URL complète (ex. `https://catalogue-portail-interne-des-appli-iota.vercel.app/api`).
 
 ### 6.2 Routes utilisées
 

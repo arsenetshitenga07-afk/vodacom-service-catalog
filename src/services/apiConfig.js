@@ -8,11 +8,23 @@
  */
 
 /**
- * Préfixe des appels. Par défaut `/api` : en développement, Vite redirige `/api`
- * vers le backend (voir `server.proxy` dans vite.config.js), ce qui évite tout
- * problème de CORS quel que soit le port du frontend.
+ * URL de base de l'API.
+ *
+ * - En production (Vercel) : on pointe vers le même domaine que le frontend
+ *   (`/api/...`), où Vercel exécute les serverless functions. Pas de CORS,
+ *   pas de préfixe supplémentaire.
+ * - En développement local : on garde `/api` (relayé par le proxy Vite vers
+ *   `VITE_API_PROXY_TARGET`, voir `vite.config.js`).
+ *
+ * Vite n'expose au code client QUE les variables d'environnement préfixées
+ * par `VITE_`. Si vous voulez surcharger cette valeur, déclarez-la donc
+ * sous le nom `VITE_API_BASE_URL` dans votre `.env` (le préfixe est imposé
+ * par Vite, ce n'est pas un choix du projet).
  */
-export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '');
+export const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL ||
+  'https://catalogue-portail-interne-des-appli-iota.vercel.app/api'
+).replace(/\/+$/, '');
 
 export const USE_MOCK_API = import.meta.env.VITE_USE_MOCK_API === 'true';
 
