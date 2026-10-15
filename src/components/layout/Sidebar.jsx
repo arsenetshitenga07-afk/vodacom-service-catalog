@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Boxes, Code2, LayoutDashboard, Layers, Plus, Settings } from 'lucide-react';
+import { Boxes, Code2, LayoutDashboard, Layers, Plus, Settings, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -73,13 +73,21 @@ export function Sidebar({ onNavigate, className }) {
       )}
 
       {/* Paramètres : épinglés en bas de la barre latérale */}
-      <ul className="mt-auto border-t pt-4">
+      <ul className="mt-auto space-y-1 border-t pt-4">
         <NavItem
           to={ROUTES.settings}
           label={t('nav.settings')}
           icon={Settings}
           onNavigate={onNavigate}
         />
+        {canManage && (
+          <NavItem
+            to={ROUTES.adminUsers}
+            label={t('nav.adminUsers')}
+            icon={Users}
+            onNavigate={onNavigate}
+          />
+        )}
       </ul>
     </nav>
   );

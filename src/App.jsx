@@ -15,6 +15,7 @@ const ServiceDetailPage = lazy(() => import('@/pages/ServiceDetailPage'));
 const TechnologiesPage = lazy(() => import('@/pages/TechnologiesPage'));
 const DevelopersPage = lazy(() => import('@/pages/DevelopersPage'));
 const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
+const AdminUsersPage = lazy(() => import('@/pages/AdminUsersPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 export default function App() {
@@ -37,6 +38,7 @@ export default function App() {
             <Route path={ROUTES.technologies} element={<TechnologiesPage />} />
             <Route path={ROUTES.developers} element={<DevelopersPage />} />
             <Route path={ROUTES.settings} element={<SettingsPage />} />
+            <Route path={ROUTES.adminUsers} element={<AdminUsersPage />} />
           </Route>
         </Route>
 

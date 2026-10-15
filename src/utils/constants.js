@@ -86,4 +86,5 @@ export const ROUTES = {
   technologies: '/technologies',
   developers: '/developers',
   settings: '/settings',
+  adminUsers: '/admin/users',
 };

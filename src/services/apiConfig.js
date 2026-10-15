@@ -83,6 +83,14 @@ export const API_ENDPOINTS = {
     update: (id) => `/developers/${encodeURIComponent(id)}`, // PATCH → Developer (admin)
     remove: (id) => `/developers/${encodeURIComponent(id)}`, // DELETE → 204 (admin)
   },
+  // Gestion des utilisateurs — strictement admin. Le backend protège par rôle.
+  users: {
+    list: '/users', // GET ?page&limit → { data: User[], meta: { total, page, limit, totalPages } }
+    detail: (id) => `/users/${encodeURIComponent(id)}`, // GET → User (sans hash)
+    update: (id) => `/users/${encodeURIComponent(id)}`, // PATCH { name?, email? } → User (admin)
+    updateRole: (id) => `/users/${encodeURIComponent(id)}/role`, // PATCH { role: 'admin' | 'user' } → User (admin)
+    remove: (id) => `/users/${encodeURIComponent(id)}`, // DELETE → 204 (admin)
+  },
 };
 
 /** Méthode HTTP utilisée pour la mise à jour d'un service. */

@@ -386,6 +386,62 @@
     },
     "done": "La ressource a été créée et attachée aux applications sélectionnées."
   },
+  "admin": {
+    "users": {
+      "title": "Utilisateurs",
+      "subtitle_one": "{{count}} utilisateur inscrit",
+      "subtitle_other": "{{count}} utilisateurs inscrits",
+      "search": "Rechercher par nom ou e-mail…",
+      "roleFilter": {
+        "all": "Tous les rôles",
+        "admin": "Administrateurs",
+        "user": "Utilisateurs"
+      },
+      "columns": {
+        "name": "Nom",
+        "email": "E-mail",
+        "role": "Rôle",
+        "createdAt": "Inscrit le",
+        "actions": "Actions"
+      },
+      "roles": {
+        "admin": "Administrateur",
+        "user": "Utilisateur"
+      },
+      "empty": "Aucun utilisateur ne correspond à votre recherche.",
+      "loading": "Chargement des utilisateurs…",
+      "pagination": {
+        "previous": "Page précédente",
+        "next": "Page suivante",
+        "page": "Page {{page}} sur {{total}}"
+      },
+      "edit": "Modifier le profil",
+      "editTitle": "Modifier « {{name}} »",
+      "editDescription": "Mettez à jour le nom et l'adresse e-mail. Le rôle se modifie séparément.",
+      "nameLabel": "Nom complet",
+      "namePlaceholder": "ex. Alice Kabongo",
+      "emailLabel": "Adresse e-mail",
+      "emailPlaceholder": "alice@vodacom.cd",
+      "promote": "Promouvoir admin",
+      "demote": "Rétrograder en utilisateur",
+      "delete": "Supprimer",
+      "deleteTitle": "Supprimer « {{name}} » ?",
+      "deleteDescription": "Cette action est irréversible. L'utilisateur n'aura plus accès au portail.",
+      "selfAction": "Vous ne pouvez pas vous modifier vous-même depuis cette interface.",
+      "lastAdmin": "Impossible : c'est le dernier administrateur.",
+      "you": "(vous)",
+      "saved": "Profil mis à jour.",
+      "promoted": "{{name}} est maintenant administrateur.",
+      "demoted": "{{name}} est maintenant simple utilisateur.",
+      "deleted": "{{name}} a été supprimé.",
+      "errorLoad": "Impossible de charger la liste des utilisateurs.",
+      "errorNameRequired": "Le nom est requis.",
+      "errorEmailInvalid": "Adresse e-mail invalide.",
+      "errorEmailTaken": "Cette adresse e-mail est déjà utilisée.",
+      "errorAdminRequired": "Action réservée aux administrateurs.",
+      "notAllowed": "Vous n'avez pas les droits pour accéder à cette page."
+    }
+  },
   "nav": {
     "label": "Navigation principale",
     "section": "Menu",
@@ -396,7 +452,8 @@
     "developers": "Développeurs",
     "hide": "Masquer la barre latérale",
     "show": "Afficher la barre latérale",
-    "settings": "Paramètres"
+    "settings": "Paramètres",
+    "adminUsers": "Utilisateurs"
   },
   "pages": {
     "dashboard": {

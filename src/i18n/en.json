@@ -386,6 +386,62 @@
     },
     "done": "The item has been created and attached to the selected applications."
   },
+  "admin": {
+    "users": {
+      "title": "Users",
+      "subtitle_one": "{{count}} registered user",
+      "subtitle_other": "{{count}} registered users",
+      "search": "Search by name or email…",
+      "roleFilter": {
+        "all": "All roles",
+        "admin": "Administrators",
+        "user": "Users"
+      },
+      "columns": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "createdAt": "Registered on",
+        "actions": "Actions"
+      },
+      "roles": {
+        "admin": "Administrator",
+        "user": "User"
+      },
+      "empty": "No user matches your search.",
+      "loading": "Loading users…",
+      "pagination": {
+        "previous": "Previous page",
+        "next": "Next page",
+        "page": "Page {{page}} of {{total}}"
+      },
+      "edit": "Edit profile",
+      "editTitle": "Edit \"{{name}}\"",
+      "editDescription": "Update the name and email address. The role is changed separately.",
+      "nameLabel": "Full name",
+      "namePlaceholder": "e.g. Alice Kabongo",
+      "emailLabel": "Email",
+      "emailPlaceholder": "alice@vodacom.cd",
+      "promote": "Promote to admin",
+      "demote": "Demote to user",
+      "delete": "Delete",
+      "deleteTitle": "Delete \"{{name}}\"?",
+      "deleteDescription": "This action is irreversible. The user will no longer be able to access the portal.",
+      "selfAction": "You can't edit your own profile from this interface.",
+      "lastAdmin": "Impossible: this is the last administrator.",
+      "you": "(you)",
+      "saved": "Profile updated.",
+      "promoted": "{{name}} is now an administrator.",
+      "demoted": "{{name}} is now a regular user.",
+      "deleted": "{{name}} has been deleted.",
+      "errorLoad": "Unable to load the user list.",
+      "errorNameRequired": "Name is required.",
+      "errorEmailInvalid": "Invalid email address.",
+      "errorEmailTaken": "This email is already in use.",
+      "errorAdminRequired": "This action is reserved for administrators.",
+      "notAllowed": "You don't have permission to access this page."
+    }
+  },
   "nav": {
     "label": "Main navigation",
     "section": "Menu",
@@ -396,7 +452,8 @@
     "developers": "Developers",
     "hide": "Hide sidebar",
     "show": "Show sidebar",
-    "settings": "Settings"
+    "settings": "Settings",
+    "adminUsers": "Users"
   },
   "pages": {
     "dashboard": {

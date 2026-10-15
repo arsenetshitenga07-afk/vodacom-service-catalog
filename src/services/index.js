@@ -3,6 +3,7 @@ import { authApi as realAuthApi } from './authApi';
 import { developersApi as realDevelopersApi } from './developersApi';
 import { servicesApi as realServicesApi } from './servicesApi';
 import { technologiesApi as realTechnologiesApi } from './technologiesApi';
+import { usersApi as realUsersApi } from './usersApi';
 import { mockAuthApi, mockServicesApi, resetMockData } from './mock/mockApi';
 
 /**
@@ -13,6 +14,8 @@ export const authApi = USE_MOCK_API ? mockAuthApi : realAuthApi;
 export const servicesApi = USE_MOCK_API ? mockServicesApi : realServicesApi;
 export const technologiesApi = realTechnologiesApi;
 export const developersApi = realDevelopersApi;
+// usersApi n'est pas mocké — l'écran admin requiert le vrai backend.
+export const usersApi = realUsersApi;
 
 /** Réinitialisation des données de démo (mode simulé uniquement, sinon `null`). */
 export const resetDemoData = USE_MOCK_API ? resetMockData : null;

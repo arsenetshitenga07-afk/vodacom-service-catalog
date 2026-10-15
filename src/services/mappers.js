@@ -143,6 +143,26 @@ export function mapDeveloperFromApi(raw) {
 }
 
 /**
+ * @typedef {Object} User
+ * @property {string} id
+ * @property {string} email
+ * @property {string} name
+ * @property {'admin' | 'user' | null} role
+ * @property {string} [createdAt]
+ */
+
+/** Backend User → User. Le hash du mot de passe n'est jamais renvoyé. */
+export function mapUserFromApi(raw) {
+  return {
+    id: String(raw.id ?? raw._id ?? ''),
+    email: String(raw.email ?? '').trim(),
+    name: String(raw.name ?? '').trim(),
+    role: raw.role ?? null,
+    createdAt: raw.createdAt ?? raw.created_at ?? null,
+  };
+}
+
+/**
  * Construit le FormData envoyé à la création / mise à jour, au format de
  * `POST /services` et `PATCH /services/{id}` (voir endpoints.json) :
  * - `developers` et `techStack` : champ répété (une valeur par entrée) ;
