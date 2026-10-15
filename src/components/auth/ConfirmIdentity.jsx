@@ -15,13 +15,24 @@ import { OtpInput } from './OtpInput';
  * à l'adresse identifiée ; la session n'est ouverte qu'une fois ce code vérifié.
  * `demoCode` : en mode démo uniquement, code à afficher (aucun e-mail réel n'est envoyé).
  */
-export function ConfirmIdentity({ email, user, demoCode: initialDemoCode, onBack, onSuccess }) {
+export function ConfirmIdentity({
+  email,
+  user,
+  demoCode: initialDemoCode,
+  clientGenerated: initialClientGenerated = false,
+  onBack,
+  onSuccess,
+}) {
   const { t } = useTranslation();
   const [code, setCode] = useState('');
   const [error, setError] = useState(null);
   const [cooldown, setCooldown] = useState(OTP_RESEND_SECONDS);
   const [demoCode, setDemoCode] = useState(initialDemoCode);
   const [isResending, setIsResending] = useState(false);
+  // Le code est-il généré côté frontend (démo uniquement) ?
+  // Le backend peut renvoyer `__clientGenerated: true` quand il a lui-même généré
+  // le code (mode démo) ou quand il n'a pas pu (et le front prend le relais).
+  const [clientGenerated, setClientGenerated] = useState(initialClientGenerated);
 
   const displayName = user?.name || email;
 
@@ -69,6 +80,7 @@ export function ConfirmIdentity({ email, user, demoCode: initialDemoCode, onBack
       const result = await authApi.sendCode({ email });
       const newDemoCode = result?.demoCode;
       setDemoCode(newDemoCode);
+      setClientGenerated(Boolean(result?.__clientGenerated));
       setCode('');
       setError(null);
       setCooldown(OTP_RESEND_SECONDS);
@@ -165,13 +177,21 @@ export function ConfirmIdentity({ email, user, demoCode: initialDemoCode, onBack
       </p>
 
       {demoCode && (
-        <p className="border-warning/25 bg-warning/10 text-foreground/80 mt-5 flex items-start gap-2.5 rounded-lg border px-3 py-2.5 text-xs">
-          <Info className="text-warning mt-px size-4 shrink-0" aria-hidden="true" />
-          <span>
-            {t('auth.otp.demo')}{' '}
-            <strong className="font-mono text-sm tracking-[0.3em]">{demoCode}</strong>
-          </span>
-        </p>
+        <div className="mt-5 space-y-2">
+          <p className="border-warning/25 bg-warning/10 text-foreground/80 flex items-start gap-2.5 rounded-lg border px-3 py-2.5 text-xs">
+            <Info className="text-warning mt-px size-4 shrink-0" aria-hidden="true" />
+            <span>
+              {t('auth.otp.demo')}{' '}
+              <strong className="font-mono text-sm tracking-[0.3em]">{demoCode}</strong>
+            </span>
+          </p>
+          {clientGenerated && (
+            <p className="border-destructive/25 bg-destructive/10 text-destructive/90 flex items-start gap-2.5 rounded-lg border px-3 py-2.5 text-xs">
+              <Info className="mt-px size-4 shrink-0" aria-hidden="true" />
+              <span>{t('auth.otp.clientGenerated')}</span>
+            </p>
+          )}
+        </div>
       )}
 
       <button

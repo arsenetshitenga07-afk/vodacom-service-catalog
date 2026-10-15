@@ -69,16 +69,20 @@ export default function LoginPage() {
       const session = await authApi.login({ email, password });
       if (!FEATURES.otpLogin) return { session };
       const sent = await authApi.sendCode({ email: email.trim() });
-      return { user: session.user, demoCode: sent?.demoCode };
+      return {
+        user: session.user,
+        demoCode: sent?.demoCode,
+        clientGenerated: sent?.__clientGenerated ?? false,
+      };
     },
-    onSuccess: ({ session, user, demoCode }, variables) => {
+    onSuccess: ({ session, user, demoCode, clientGenerated }, variables) => {
       if (session) {
         queryClient.clear();
         setSession(session);
         handleConfirmed(session);
         return;
       }
-      setPending({ email: variables.email.trim(), user, demoCode });
+      setPending({ email: variables.email.trim(), user, demoCode, clientGenerated });
       toast.success(
         demoCode
           ? t('auth.otp.sentWithCode', { email: variables.email.trim(), code: demoCode })
@@ -161,6 +165,7 @@ export default function LoginPage() {
                   email={pending.email}
                   user={pending.user}
                   demoCode={pending.demoCode}
+                  clientGenerated={pending.clientGenerated}
                   onBack={backToCredentials}
                   onSuccess={handleConfirmed}
                 />

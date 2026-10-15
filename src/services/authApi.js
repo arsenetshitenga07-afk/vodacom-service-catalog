@@ -81,6 +81,12 @@ export const authApi = {
  * Normalise la réponse d'un endpoint « envoi de code » : accepte à la fois
  * `{ demoCode }` (mock) et `{ devCode }` (backend) pour rester aligné avec le
  * frontend (qui lit `demoCode`).
+ *
+ * Le frontend **ne génère pas** de code à la place du backend. Si le serveur
+ * ne renvoie rien, `demoCode` sera `null` et la notice démo ne s'affichera
+ * pas (comportement attendu : pas de code = pas d'affichage).
+ *
+ * @returns {{ sent?: boolean, demoCode: string|null, devCode: string|null }}
  */
 function normalizeCodeResponse(data) {
   const payload = data ?? {};

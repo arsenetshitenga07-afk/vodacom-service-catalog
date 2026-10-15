@@ -87,7 +87,8 @@
       "resent": "A new code has been sent.",
       "sent": "A verification code has been sent to {{email}}.",
       "sentWithCode": "A verification code has been sent to {{email}}. (Demo: {{code}})",
-      "demo": "Demo mode — no email is sent. Your code:"
+      "demo": "Demo mode — no email is sent. Your code:",
+      "clientGenerated": "⚠️ Code generated locally (demo) — the server won't recognize it. Type it anyway to test the UI."
     },
     "register": {
       "title": "Create account",

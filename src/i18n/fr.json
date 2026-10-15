@@ -87,7 +87,8 @@
       "resent": "Un nouveau code a été envoyé.",
       "sent": "Un code de vérification a été envoyé à {{email}}.",
       "sentWithCode": "Un code de vérification a été envoyé à {{email}}. (Démo : {{code}})",
-      "demo": "Mode démo — aucun e-mail n’est envoyé. Votre code :"
+      "demo": "Mode démo — aucun e-mail n’est envoyé. Votre code :",
+      "clientGenerated": "⚠️ Code généré localement (démo) — le serveur ne le reconnaîtra pas. Saisis-le quand même pour tester l’UI."
     },
     "register": {
       "title": "Créer un compte",

@@ -66,6 +66,7 @@ export default function ForgotPasswordPage() {
   const [codeError, setCodeError] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [demoCode, setDemoCode] = useState(null);
+  const [clientGenerated, setClientGenerated] = useState(false);
   const [cooldown, setCooldown] = useState(OTP_RESEND_SECONDS);
   const [isResending, setIsResending] = useState(false);
 
@@ -88,6 +89,7 @@ export default function ForgotPasswordPage() {
       const newDemoCode = data?.demoCode ?? null;
       setEmail(variables.email);
       setDemoCode(newDemoCode);
+      setClientGenerated(Boolean(data?.__clientGenerated));
       toast.success(
         newDemoCode
           ? t('auth.otp.sentWithCode', { email: variables.email, code: newDemoCode })
@@ -153,6 +155,7 @@ export default function ForgotPasswordPage() {
       const data = await authApi.requestPasswordReset({ email });
       const newDemoCode = data?.demoCode ?? null;
       setDemoCode(newDemoCode);
+      setClientGenerated(Boolean(data?.__clientGenerated));
       setCode('');
       setCodeError(null);
       setCooldown(OTP_RESEND_SECONDS);
@@ -405,13 +408,21 @@ export default function ForgotPasswordPage() {
                   </p>
 
                   {demoCode && (
-                    <p className="border-warning/25 bg-warning/10 text-foreground/80 flex items-start gap-2.5 rounded-lg border px-3 py-2.5 text-xs">
-                      <Info className="text-warning mt-px size-4 shrink-0" aria-hidden="true" />
-                      <span>
-                        {t('auth.otp.demo')}{' '}
-                        <strong className="font-mono text-sm tracking-[0.3em]">{demoCode}</strong>
-                      </span>
-                    </p>
+                    <div className="space-y-2">
+                      <p className="border-warning/25 bg-warning/10 text-foreground/80 flex items-start gap-2.5 rounded-lg border px-3 py-2.5 text-xs">
+                        <Info className="text-warning mt-px size-4 shrink-0" aria-hidden="true" />
+                        <span>
+                          {t('auth.otp.demo')}{' '}
+                          <strong className="font-mono text-sm tracking-[0.3em]">{demoCode}</strong>
+                        </span>
+                      </p>
+                      {clientGenerated && (
+                        <p className="border-destructive/25 bg-destructive/10 text-destructive/90 flex items-start gap-2.5 rounded-lg border px-3 py-2.5 text-xs">
+                          <Info className="mt-px size-4 shrink-0" aria-hidden="true" />
+                          <span>{t('auth.otp.clientGenerated')}</span>
+                        </p>
+                      )}
+                    </div>
                   )}
                 </form>
               )}
