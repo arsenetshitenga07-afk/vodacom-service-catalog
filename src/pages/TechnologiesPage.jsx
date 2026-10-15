@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ArrowRight, Plus, Layers, Search, SearchX } from 'lucide-react';
+import { ArrowRight, Layers, Plus, Search, SearchX, TriangleAlert } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ServiceAvatar } from '@/components/common/Avatar';
@@ -15,6 +15,7 @@ import { useServicesQuery } from '@/hooks/useServices';
 import { useTechnologiesQuery } from '@/hooks/useTechnologies';
 import { selectCanManage, useAuthStore } from '@/store/authStore';
 import { ROUTES } from '@/utils/constants';
+import { getErrorMessage } from '@/utils/errors';
 
 const MAX_APPS_SHOWN = 4;
 
@@ -26,8 +27,17 @@ const MAX_APPS_SHOWN = 4;
  */
 export default function TechnologiesPage() {
   const { t } = useTranslation();
-  const { data: technologies = [], isPending: isTechPending } = useTechnologiesQuery();
-  const { data: services = [], isPending: isServicesPending } = useServicesQuery();
+  const {
+    data: technologies = [],
+    isPending: isTechPending,
+    isError: isTechError,
+    error: techError,
+  } = useTechnologiesQuery();
+  const {
+    data: services = [],
+    isPending: isServicesPending,
+    isError: isServicesError,
+  } = useServicesQuery();
   const [search, setSearch] = useState('');
   const [attachOpen, setAttachOpen] = useState(false);
   const canManage = useAuthStore(selectCanManage);
@@ -48,6 +58,8 @@ export default function TechnologiesPage() {
   const query = search.trim().toLowerCase();
   const filtered = technologies.filter((tech) => tech.name.toLowerCase().includes(query));
   const isPending = isTechPending || isServicesPending;
+  const isError = isTechError || isServicesError;
+  const errorMessage = techError ? getErrorMessage(techError, t) : null;
 
   return (
     <div className="space-y-6">
@@ -97,6 +109,12 @@ export default function TechnologiesPage() {
             </li>
           ))}
         </ul>
+      ) : isError ? (
+        <EmptyState
+          icon={TriangleAlert}
+          title={t('services.errorTitle')}
+          description={errorMessage ?? t('common.error')}
+        />
       ) : filtered.length === 0 ? (
         <EmptyState
           icon={SearchX}

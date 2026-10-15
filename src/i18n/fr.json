@@ -18,7 +18,8 @@
     "clear": "Effacer",
     "removeItem": "Retirer {{item}}",
     "loading": "Chargement…",
-    "notSet": "Non renseigné"
+    "notSet": "Non renseigné",
+    "error": "Une erreur est survenue. Réessayez."
   },
   "header": {
     "language": "Langue",

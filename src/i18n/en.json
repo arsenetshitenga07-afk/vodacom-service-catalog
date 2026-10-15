@@ -18,7 +18,8 @@
     "clear": "Clear",
     "removeItem": "Remove {{item}}",
     "loading": "Loading…",
-    "notSet": "Not set"
+    "notSet": "Not set",
+    "error": "Something went wrong. Please try again."
   },
   "header": {
     "language": "Language",

@@ -32,6 +32,18 @@ httpClient.interceptors.response.use(
       logout('sessionExpired');
     }
 
+    // Log systématique des erreurs 4xx/5xx pour aider au debug (sauf les annulations
+    // explicites — code `ERR_CANCELED` — qui sont normales quand l'utilisateur
+    // change de page vite).
+    const status = error.response?.status;
+    if (status && status >= 400) {
+      console.warn(`[http] ${status} ${error.config?.method?.toUpperCase()} ${error.config?.url}`, {
+        tokenPresent: Boolean(token),
+        isLoginRequest,
+        message: error.message,
+      });
+    }
+
     return Promise.reject(normalizeApiError(error));
   },
 );

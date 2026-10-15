@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ArrowRight, Plus, Code2, Search, SearchX } from 'lucide-react';
+import { ArrowRight, Code2, Plus, Search, SearchX, TriangleAlert } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { EmptyState } from '@/components/common/EmptyState';
@@ -15,6 +15,7 @@ import { useDevelopersQuery } from '@/hooks/useDevelopers';
 import { useServicesQuery } from '@/hooks/useServices';
 import { selectCanManage, useAuthStore } from '@/store/authStore';
 import { ROUTES } from '@/utils/constants';
+import { getErrorMessage } from '@/utils/errors';
 import { getInitials } from '@/utils/format';
 
 const MAX_TECH_SHOWN = 5;
@@ -27,8 +28,17 @@ const MAX_TECH_SHOWN = 5;
  */
 export default function DevelopersPage() {
   const { t } = useTranslation();
-  const { data: developers = [], isPending: isDevPending } = useDevelopersQuery();
-  const { data: services = [], isPending: isServicesPending } = useServicesQuery();
+  const {
+    data: developers = [],
+    isPending: isDevPending,
+    isError: isDevError,
+    error: devError,
+  } = useDevelopersQuery();
+  const {
+    data: services = [],
+    isPending: isServicesPending,
+    isError: isServicesError,
+  } = useServicesQuery();
   const [search, setSearch] = useState('');
   const [attachOpen, setAttachOpen] = useState(false);
   const canManage = useAuthStore(selectCanManage);
@@ -62,6 +72,8 @@ export default function DevelopersPage() {
   });
 
   const isPending = isDevPending || isServicesPending;
+  const isError = isDevError || isServicesError;
+  const errorMessage = devError ? getErrorMessage(devError, t) : null;
 
   return (
     <div className="space-y-6">
@@ -111,6 +123,12 @@ export default function DevelopersPage() {
             </li>
           ))}
         </ul>
+      ) : isError ? (
+        <EmptyState
+          icon={TriangleAlert}
+          title={t('services.errorTitle')}
+          description={errorMessage ?? t('common.error')}
+        />
       ) : filtered.length === 0 ? (
         <EmptyState
           icon={SearchX}
