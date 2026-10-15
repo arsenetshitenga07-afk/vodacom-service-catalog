@@ -10,23 +10,34 @@
 /**
  * URL de base de l'API.
  *
- * - En production (Vercel) : on pointe vers le même domaine que le frontend
- *   (`/api/...`), où Vercel exécute les serverless functions. Pas de CORS,
- *   pas de préfixe supplémentaire.
- * - En développement local : on garde `/api` (relayé par le proxy Vite vers
- *   `VITE_API_PROXY_TARGET`, voir `vite.config.js`).
+ * Ordre de résolution :
+ *   1) `VITE_API_BASE_URL` (variable d'env Vercel ou `.env.local` en dev)
+ *   2) URL Render codée en dur (repli : portail Vodacom NestJS déployé)
+ *   3) `/api` (chemin relatif — proxy Vite en dev, ou API Vercel same-origin)
  *
- * Vite n'expose au code client QUE les variables d'environnement préfixées
- * par `VITE_`. Si vous voulez surcharger cette valeur, déclarez-la donc
- * sous le nom `VITE_API_BASE_URL` dans votre `.env` (le préfixe est imposé
- * par Vite, ce n'est pas un choix du projet).
+ * ⚠️ Les endpoints déclarés plus bas (`API_ENDPOINTS.auth.login`, etc.) ne
+ * contiennent PAS le préfixe `/api`. Si vous changez la valeur par défaut,
+ * incluez `/api` à la fin, sinon les requêtes partiront vers `/auth/login`
+ * au lieu de `/api/auth/login` → 404 sur Render.
+ *
+ * Le slash final est stripé automatiquement.
  */
+const FALLBACK_API_BASE_URL = 'https://catalogue-portail-interne-des.onrender.com/api';
+
 export const API_BASE_URL = (
   import.meta.env.VITE_API_BASE_URL ||
-  'https://catalogue-portail-interne-des-appli-iota.vercel.app/api'
+  FALLBACK_API_BASE_URL
 ).replace(/\/+$/, '');
 
-export const USE_MOCK_API = import.meta.env.VITE_USE_MOCK_API === 'true';
+// Mode démo : `true` par défaut en dev (offline, aucune dépendance),
+// `false` en production (utilise l'API réelle). Override possible via
+// `VITE_USE_MOCK_API=true|false` dans `.env` ou sur Vercel.
+export const USE_MOCK_API = (() => {
+  const flag = import.meta.env.VITE_USE_MOCK_API;
+  if (flag === 'true') return true;
+  if (flag === 'false') return false;
+  return import.meta.env.DEV;
+})();
 
 export const API_TIMEOUT_MS = 30_000;
 
@@ -60,22 +71,33 @@ export const API_ENDPOINTS = {
 /** Méthode HTTP utilisée pour la mise à jour d'un service. */
 export const UPDATE_METHOD = 'patch';
 
-const flag = (name) => import.meta.env[name] === 'true';
-
 /**
- * Fonctionnalités qui dépendent de routes absentes de `endpoints.json`.
- * Toujours actives en mode démo ; avec le vrai backend, activées via .env
- * uniquement quand le backend les fournit.
+ * Fonctionnalités qui dépendent de routes hors contrat `endpoints.json`.
+ *
+ * Résolution :
+ *   - En mode démo (USE_MOCK_API=true) : toujours actives (le mock les supporte).
+ *   - En mode prod (USE_MOCK_API=false) :
+ *       * par défaut ACTIVES (le backend Render les fournit) ;
+ *       * on peut forcer OFF en passant `VITE_FEATURE_X=false` côté Vercel.
  */
+const isProd = !USE_MOCK_API;
+const feature = (envName) => {
+  if (USE_MOCK_API) return true;
+  const v = import.meta.env[envName];
+  if (v === 'true') return true;
+  if (v === 'false') return false;
+  return isProd; // prod → activé par défaut
+};
+
 export const FEATURES = {
   /** Connexion en deux étapes avec code envoyé par e-mail (/auth/send-code, /auth/verify-code). */
-  otpLogin: USE_MOCK_API || flag('VITE_FEATURE_OTP_LOGIN'),
+  otpLogin: feature('VITE_FEATURE_OTP_LOGIN'),
   /** Changement de mot de passe (/auth/change-password). */
-  changePassword: USE_MOCK_API || flag('VITE_FEATURE_CHANGE_PASSWORD'),
+  changePassword: feature('VITE_FEATURE_CHANGE_PASSWORD'),
   /** Champ « Département » sur les services (non prévu par le schéma `service`). */
-  departments: USE_MOCK_API || flag('VITE_FEATURE_DEPARTMENTS'),
-  /** Inscription publique de compte (/auth/register). Réservé à un futur portail ouvert. */
-  selfSignup: USE_MOCK_API || flag('VITE_FEATURE_SELF_SIGNUP'),
+  departments: feature('VITE_FEATURE_DEPARTMENTS'),
+  /** Inscription publique de compte (/auth/register). */
+  selfSignup: feature('VITE_FEATURE_SELF_SIGNUP'),
   /** Mot de passe oublié : envoi de code puis réinitialisation (/auth/forgot-password + /auth/reset-password). */
-  passwordReset: USE_MOCK_API || flag('VITE_FEATURE_PASSWORD_RESET'),
+  passwordReset: feature('VITE_FEATURE_PASSWORD_RESET'),
 };
