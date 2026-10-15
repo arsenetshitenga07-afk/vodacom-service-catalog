@@ -67,11 +67,17 @@ export function ConfirmIdentity({ email, user, demoCode: initialDemoCode, onBack
     setIsResending(true);
     try {
       const result = await authApi.sendCode({ email });
-      setDemoCode(result?.demoCode);
+      const newDemoCode = result?.demoCode;
+      setDemoCode(newDemoCode);
       setCode('');
       setError(null);
       setCooldown(OTP_RESEND_SECONDS);
-      toast.success(t('auth.otp.resent'));
+      toast.success(
+        newDemoCode
+          ? t('auth.otp.sentWithCode', { email, code: newDemoCode })
+          : t('auth.otp.resent'),
+        { duration: 8000 },
+      );
     } catch (err) {
       toast.error(getErrorMessage(err, t));
     } finally {

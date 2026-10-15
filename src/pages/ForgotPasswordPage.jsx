@@ -85,9 +85,15 @@ export default function ForgotPasswordPage() {
   const requestMutation = useMutation({
     mutationFn: ({ email }) => authApi.requestPasswordReset({ email }),
     onSuccess: (data, variables) => {
+      const newDemoCode = data?.demoCode ?? null;
       setEmail(variables.email);
-      setDemoCode(data?.demoCode ?? null);
-      toast.success(t('auth.forgot.codeSent', { email: variables.email }));
+      setDemoCode(newDemoCode);
+      toast.success(
+        newDemoCode
+          ? t('auth.otp.sentWithCode', { email: variables.email, code: newDemoCode })
+          : t('auth.forgot.codeSent', { email: variables.email }),
+        { duration: 8000 },
+      );
       setCode('');
       setCodeError(null);
       setCooldown(OTP_RESEND_SECONDS);
@@ -145,11 +151,17 @@ export default function ForgotPasswordPage() {
     setIsResending(true);
     try {
       const data = await authApi.requestPasswordReset({ email });
-      setDemoCode(data?.demoCode ?? null);
+      const newDemoCode = data?.demoCode ?? null;
+      setDemoCode(newDemoCode);
       setCode('');
       setCodeError(null);
       setCooldown(OTP_RESEND_SECONDS);
-      toast.success(t('auth.otp.resent'));
+      toast.success(
+        newDemoCode
+          ? t('auth.otp.sentWithCode', { email, code: newDemoCode })
+          : t('auth.otp.resent'),
+        { duration: 8000 },
+      );
     } catch (err) {
       toast.error(getErrorMessage(err, t));
     } finally {

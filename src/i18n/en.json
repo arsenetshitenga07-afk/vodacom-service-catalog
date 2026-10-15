@@ -86,6 +86,7 @@
       "resendIn_other": "Resend in {{count}} s",
       "resent": "A new code has been sent.",
       "sent": "A verification code has been sent to {{email}}.",
+      "sentWithCode": "A verification code has been sent to {{email}}. (Demo: {{code}})",
       "demo": "Demo mode — no email is sent. Your code:"
     },
     "register": {

@@ -79,7 +79,12 @@ export default function LoginPage() {
         return;
       }
       setPending({ email: variables.email.trim(), user, demoCode });
-      toast.success(t('auth.otp.sent', { email: variables.email.trim() }));
+      toast.success(
+        demoCode
+          ? t('auth.otp.sentWithCode', { email: variables.email.trim(), code: demoCode })
+          : t('auth.otp.sent', { email: variables.email.trim() }),
+        { duration: 8000 },
+      );
     },
     onError: (error) => {
       const message =
