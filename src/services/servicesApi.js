@@ -39,14 +39,34 @@ export const servicesApi = {
 
   /** @param {FormData} formData */
   async create(formData) {
-    const { data } = await httpClient.post(API_ENDPOINTS.services.list, formData);
-    return mapServiceFromApi(unwrapEntity(data));
+    logFormData('POST /services', formData);
+    try {
+      const { data } = await httpClient.post(API_ENDPOINTS.services.list, formData);
+      return mapServiceFromApi(unwrapEntity(data));
+    } catch (error) {
+      console.error('[servicesApi.create] error response:', {
+        status: error?.response?.status,
+        data: error?.response?.data,
+        message: error?.message,
+      });
+      throw error;
+    }
   },
 
   /** @param {{ id: string, formData: FormData }} params */
   async update({ id, formData }) {
-    const { data } = await httpClient[UPDATE_METHOD](API_ENDPOINTS.services.detail(id), formData);
-    return mapServiceFromApi(unwrapEntity(data));
+    logFormData(`PATCH /services/${id}`, formData);
+    try {
+      const { data } = await httpClient[UPDATE_METHOD](API_ENDPOINTS.services.detail(id), formData);
+      return mapServiceFromApi(unwrapEntity(data));
+    } catch (error) {
+      console.error('[servicesApi.update] error response:', {
+        status: error?.response?.status,
+        data: error?.response?.data,
+        message: error?.message,
+      });
+      throw error;
+    }
   },
 
   /** @param {string} id */
@@ -64,4 +84,20 @@ export async function checkHealth() {
   } catch {
     return false;
   }
+}
+
+/**
+ * Helper de debug : logge le contenu d'un FormData dans la console.
+ * À retirer une fois le bug résolu (mais ne fait pas de mal en attendant).
+ */
+function logFormData(label, formData) {
+  if (!(formData instanceof FormData)) {
+    console.log(`[${label}] body:`, formData);
+    return;
+  }
+  const entries = [];
+  for (const [key, value] of formData.entries()) {
+    entries.push({ key, value: value instanceof File ? `[File ${value.name}]` : value });
+  }
+  console.log(`[${label}] FormData (${entries.length} entries):`, entries);
 }
