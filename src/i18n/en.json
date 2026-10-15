@@ -320,6 +320,72 @@
     "legal": "Legal & Regulatory",
     "supply-chain": "Supply Chain & Logistics"
   },
+  "manage": {
+    "rename": "Rename",
+    "newName": "New name",
+    "success": "{{name}} has been renamed to {{newName}}.",
+    "error": "Unable to rename this item.",
+    "create": "Create",
+    "createTitle_technology": "New technology",
+    "createTitle_developer": "New developer",
+    "createDescription_technology": "Add a technology to the catalog. It can then be attached to applications.",
+    "createDescription_developer": "Add a developer to the catalog. They can then be attached to applications.",
+    "nameLabel_technology": "Technology name",
+    "nameLabel_developer": "Developer name",
+    "namePlaceholder_technology": "e.g. React, PostgreSQL, TailwindCSS",
+    "namePlaceholder_developer": "e.g. Jeanne Kabongo",
+    "emailLabel": "Email (optional)",
+    "emailPlaceholder": "name@vodacom.cd",
+    "roleLabel": "Role (optional)",
+    "rolePlaceholder": "e.g. Lead Frontend",
+    "created": "{{name}} has been added to the catalog.",
+    "errorCreate": "Unable to create this item.",
+    "errorNameRequired": "Name is required.",
+    "errorNameTooShort": "At least 2 characters.",
+    "errorNameTooLong": "Maximum 60 characters.",
+    "errorNameTaken": "This name is already used.",
+    "technology": {
+      "remove": "Delete technology",
+      "removeTitle": "Delete \"{{name}}\"?",
+      "removeDescription": "The technology will be removed from the catalog. Applications that reference it won't be modified — the value will simply be ignored.",
+      "removed": "Technology \"{{name}}\" has been deleted.",
+      "renameTitle": "Rename \"{{name}}\"",
+      "renameDescription": "The new name will replace the old one everywhere in the catalog (services, developers, etc.)."
+    },
+    "developer": {
+      "remove": "Delete developer",
+      "removeTitle": "Delete \"{{name}}\"?",
+      "removeDescription": "The developer will be removed from the catalog. Applications that reference them won't be modified.",
+      "removed": "Developer \"{{name}}\" has been deleted.",
+      "renameTitle": "Rename \"{{name}}\"",
+      "renameDescription": "The new name will replace the old one everywhere in the catalog."
+    }
+  },
+  "attach": {
+    "open": "Add",
+    "filter": "Filter applications…",
+    "selected_one": "{{count}} application selected",
+    "selected_other": "{{count}} applications selected",
+    "already": "Already present",
+    "error": "Unable to save. Please try again.",
+    "technology": {
+      "title": "Add a technology",
+      "description": "Create a new technology then pick the applications that use it.",
+      "nameLabel": "Technology name",
+      "namePlaceholder": "e.g. React",
+      "servicesLabel": "Related applications",
+      "submit": "Create and attach"
+    },
+    "developer": {
+      "title": "Add a developer",
+      "description": "Create a new developer then pick the applications they work on.",
+      "nameLabel": "Developer name",
+      "namePlaceholder": "e.g. Jeanne Kabongo",
+      "servicesLabel": "Related applications",
+      "submit": "Create and attach"
+    },
+    "done": "The item has been created and attached to the selected applications."
+  },
   "nav": {
     "label": "Main navigation",
     "section": "Menu",

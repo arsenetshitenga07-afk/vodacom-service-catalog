@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { useVerifyCode } from '@/hooks/useAuth';
-import { authApi, USE_MOCK_API } from '@/services';
+import { authApi } from '@/services';
 import { OTP_LENGTH, OTP_RESEND_SECONDS } from '@/utils/constants';
 import { getErrorMessage } from '@/utils/errors';
 import { getInitials } from '@/utils/format';
@@ -164,7 +164,7 @@ export function ConfirmIdentity({ email, user, demoCode: initialDemoCode, onBack
         )}
       </p>
 
-      {USE_MOCK_API && demoCode && (
+      {demoCode && (
         <p className="border-warning/25 bg-warning/10 text-foreground/80 mt-5 flex items-start gap-2.5 rounded-lg border px-3 py-2.5 text-xs">
           <Info className="text-warning mt-px size-4 shrink-0" aria-hidden="true" />
           <span>

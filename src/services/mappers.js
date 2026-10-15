@@ -102,12 +102,45 @@ export function mapSessionFromApi(raw) {
   };
 }
 
-/** « YYYY-MM-DD » (champ date) → date-time ISO attendue par le backend. */
-const toIsoDateTime = (value) => {
-  const trimmed = value?.trim?.() ?? '';
-  if (!trimmed) return '';
-  return /^\d{4}-\d{2}-\d{2}$/.test(trimmed) ? `${trimmed}T00:00:00.000Z` : trimmed;
-};
+/**
+ * @typedef {Object} Technology
+ * @property {string} id
+ * @property {string} name
+ * @property {string} [createdAt]
+ */
+
+/** Backend Technology → Technology. */
+export function mapTechnologyFromApi(raw) {
+  return {
+    id: String(raw.id ?? raw._id ?? ''),
+    name: String(raw.name ?? '').trim(),
+    createdAt: raw.createdAt ?? raw.created_at ?? null,
+  };
+}
+
+/**
+ * @typedef {Object} Developer
+ * @property {string} id
+ * @property {string} name
+ * @property {string} email
+ * @property {string} role
+ * @property {string|null} userId
+ * @property {string} [createdAt]
+ * @property {string} [updatedAt]
+ */
+
+/** Backend Developer → Developer. */
+export function mapDeveloperFromApi(raw) {
+  return {
+    id: String(raw.id ?? raw._id ?? ''),
+    name: String(raw.name ?? '').trim(),
+    email: String(raw.email ?? '').trim(),
+    role: String(raw.role ?? '').trim(),
+    userId: raw.userId ?? raw.user_id ?? null,
+    createdAt: raw.createdAt ?? raw.created_at ?? null,
+    updatedAt: raw.updatedAt ?? raw.updated_at ?? null,
+  };
+}
 
 /**
  * Construit le FormData envoyé à la création / mise à jour, au format de
@@ -119,6 +152,13 @@ const toIsoDateTime = (value) => {
  * - en édition, `removeDocumentIds` : UUID des documents à supprimer (répété).
  * `department` n'est envoyé que si le backend le gère (FEATURES.departments).
  */
+
+/** « YYYY-MM-DD » (champ date) → date-time ISO attendue par le backend. */
+const toIsoDateTime = (value) => {
+  const trimmed = value?.trim?.() ?? '';
+  if (!trimmed) return '';
+  return /^\d{4}-\d{2}-\d{2}$/.test(trimmed) ? `${trimmed}T00:00:00.000Z` : trimmed;
+};
 export function toServiceFormData(
   values,
   { newFiles = [], removedDocumentIds = [], includeDepartment = false } = {},

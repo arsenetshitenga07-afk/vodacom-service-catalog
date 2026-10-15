@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 import { Loader2, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -30,22 +29,23 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import { serviceKeys } from '@/hooks/useServices';
-import { servicesApi } from '@/services';
-import { listFormData, planListChange } from '@/utils/bulkListUpdate';
+import { useDeleteDeveloper, useUpdateDeveloper } from '@/hooks/useDevelopers';
+import { useDeleteTechnology, useUpdateTechnology } from '@/hooks/useTechnologies';
 import { getErrorMessage } from '@/utils/errors';
 
-const FIELD = { technology: 'techStack', developer: 'developers' };
-
 /**
- * Menu « ⋯ » d'une technologie ou d'un développeur : renommer partout, ou retirer
- * de toutes les applications. Chaque application concernée est mise à jour
- * (PATCH partiel de la seule liste modifiée).
+ * Menu « ⋯ » d'une technologie ou d'un développeur.
+ * Avec les nouveaux endpoints, le renommage et la suppression sont des opérations
+ * directes sur l'entité (`PATCH /technologies/{id}` et `DELETE /technologies/{id}`).
+ *
+ * `entityId` = UUID backend (obligatoire pour PATCH/DELETE).
+ * `name` = nom affiché dans le menu et les dialogues.
  */
-export function ManageItemMenu({ kind, name, services }) {
+export function ManageItemMenu({ kind, entityId, name }) {
   const { t } = useTranslation();
   const [dialog, setDialog] = useState(null); // 'rename' | 'remove' | null
   const prefix = `manage.${kind}`;
+  const disabled = !entityId;
 
   return (
     <>
@@ -56,6 +56,7 @@ export function ManageItemMenu({ kind, name, services }) {
             size="icon-sm"
             className="text-muted-foreground data-[state=open]:bg-accent -mt-1 -mr-1.5 shrink-0"
             aria-label={`${t('common.moreActions')} — ${name}`}
+            disabled={disabled}
           >
             <MoreHorizontal />
           </Button>
@@ -77,72 +78,57 @@ export function ManageItemMenu({ kind, name, services }) {
         open={dialog === 'rename'}
         onOpenChange={(open) => !open && setDialog(null)}
         kind={kind}
+        entityId={entityId}
         name={name}
-        services={services}
       />
       <RemoveDialog
         open={dialog === 'remove'}
         onOpenChange={(open) => !open && setDialog(null)}
         kind={kind}
+        entityId={entityId}
         name={name}
-        services={services}
       />
     </>
   );
 }
 
-/** Applique un plan de modification et rafraîchit le catalogue. */
-function useApplyPlan() {
-  const { t } = useTranslation();
-  const queryClient = useQueryClient();
-  const [isSaving, setIsSaving] = useState(false);
-
-  const apply = async (field, plan, messages) => {
-    setIsSaving(true);
-    try {
-      for (const { service, list } of plan.updates) {
-        await servicesApi.update({ id: service.id, formData: listFormData(field, list) });
-      }
-      if (plan.updates.length > 0) toast.success(messages.success);
-      if (plan.skipped.length > 0) {
-        toast.warning(messages.skipped, {
-          description: plan.skipped.map((service) => service.name).join(', '),
-        });
-      }
-      return true;
-    } catch (error) {
-      toast.error(getErrorMessage(error, t));
-      return false;
-    } finally {
-      await queryClient.invalidateQueries({ queryKey: serviceKeys.all });
-      setIsSaving(false);
-    }
-  };
-
-  return { apply, isSaving };
+/** Sélectionne les bons hooks de mutation selon le `kind`. */
+function useEntityMutations(kind) {
+  if (kind === 'technology') {
+    return { useUpdate: useUpdateTechnology, useDelete: useDeleteTechnology };
+  }
+  return { useUpdate: useUpdateDeveloper, useDelete: useDeleteDeveloper };
 }
 
-function RenameDialog({ open, onOpenChange, kind, name, services }) {
+function RenameDialog({ open, onOpenChange, kind, entityId, name }) {
   const { t } = useTranslation();
-  const { apply, isSaving } = useApplyPlan();
+  const { useUpdate } = useEntityMutations(kind);
+  const updateMutation = useUpdate();
   const [value, setValue] = useState(name);
   const [error, setError] = useState(null);
-  const field = FIELD[kind];
-  const prefix = `manage.${kind}`;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const next = value.trim();
-    if (!next) return setError(t('validation.required'));
-    if (next === name) return onOpenChange(false);
-
-    const plan = planListChange(services, field, name, next);
-    const ok = await apply(field, plan, {
-      success: t(`${prefix}.renamed`, { from: name, to: next, count: plan.updates.length }),
-      skipped: t('manage.skipped'),
-    });
-    if (ok) onOpenChange(false);
+    const trimmed = value.trim();
+    if (!trimmed) {
+      setError(t('manage.errorNameRequired'));
+      return;
+    }
+    if (trimmed === name) {
+      onOpenChange(false);
+      return;
+    }
+    try {
+      await updateMutation.mutateAsync({ id: entityId, name: trimmed });
+      toast.success(t('manage.success', { name, newName: trimmed }));
+      onOpenChange(false);
+    } catch (err) {
+      if (err?.status === 409) setError(t('manage.errorNameTaken'));
+      else setError(getErrorMessage(err, t) || t('manage.error'));
+    }
   };
+
+  const isSaving = updateMutation.isPending;
 
   return (
     <Dialog
@@ -158,16 +144,16 @@ function RenameDialog({ open, onOpenChange, kind, name, services }) {
     >
       <DialogContent closeLabel={t('common.close')} className="max-w-md">
         <DialogHeader>
-          <DialogTitle>{t(`${prefix}.renameTitle`, { name })}</DialogTitle>
-          <DialogDescription>{t(`${prefix}.renameDescription`)}</DialogDescription>
+          <DialogTitle>{t(`manage.${kind}.renameTitle`, { name })}</DialogTitle>
+          <DialogDescription>{t(`manage.${kind}.renameDescription`)}</DialogDescription>
         </DialogHeader>
         <form noValidate onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <label htmlFor={`rename-${kind}`} className="text-sm font-medium">
+            <label htmlFor={`rename-${kind}-${entityId}`} className="text-sm font-medium">
               {t('manage.newName')}
             </label>
             <Input
-              id={`rename-${kind}`}
+              id={`rename-${kind}-${entityId}`}
               value={value}
               onChange={(event) => {
                 setValue(event.target.value);
@@ -199,24 +185,23 @@ function RenameDialog({ open, onOpenChange, kind, name, services }) {
   );
 }
 
-function RemoveDialog({ open, onOpenChange, kind, name, services }) {
+function RemoveDialog({ open, onOpenChange, kind, entityId, name }) {
   const { t } = useTranslation();
-  const { apply, isSaving } = useApplyPlan();
-  const field = FIELD[kind];
-  const prefix = `manage.${kind}`;
-  const usedBy = services.filter((service) =>
-    service[field].some((item) => item.toLowerCase() === name.toLowerCase()),
-  ).length;
+  const { useDelete } = useEntityMutations(kind);
+  const deleteMutation = useDelete();
 
   const handleConfirm = async (event) => {
     event.preventDefault();
-    const plan = planListChange(services, field, name);
-    const ok = await apply(field, plan, {
-      success: t(`${prefix}.removed`, { name, count: plan.updates.length }),
-      skipped: t(`${prefix}.skippedLast`),
-    });
-    if (ok) onOpenChange(false);
+    try {
+      await deleteMutation.mutateAsync(entityId);
+      toast.success(t(`manage.${kind}.removed`, { name }));
+      onOpenChange(false);
+    } catch (err) {
+      toast.error(getErrorMessage(err, t) || t('manage.error'));
+    }
   };
+
+  const isSaving = deleteMutation.isPending;
 
   return (
     <AlertDialog open={open} onOpenChange={(next) => !isSaving && onOpenChange(next)}>
@@ -225,16 +210,16 @@ function RemoveDialog({ open, onOpenChange, kind, name, services }) {
           <span className="bg-destructive/10 text-destructive ring-destructive/5 mb-2 grid size-12 place-items-center rounded-full ring-8">
             <Trash2 className="size-5" aria-hidden="true" />
           </span>
-          <AlertDialogTitle>{t(`${prefix}.removeTitle`, { name })}</AlertDialogTitle>
+          <AlertDialogTitle>{t(`manage.${kind}.removeTitle`, { name })}</AlertDialogTitle>
           <AlertDialogDescription>
-            {t(`${prefix}.removeDescription`, { name, count: usedBy })}
+            {t(`manage.${kind}.removeDescription`, { name })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isSaving}>{t('common.cancel')}</AlertDialogCancel>
           <AlertDialogAction variant="destructive" onClick={handleConfirm} disabled={isSaving}>
             {isSaving ? <Loader2 className="animate-spin" /> : null}
-            {t(`${prefix}.remove`)}
+            {t(`manage.${kind}.remove`)}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -14,16 +14,22 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { developerKeys, useCreateDeveloper } from '@/hooks/useDevelopers';
 import { serviceKeys } from '@/hooks/useServices';
+import { technologyKeys, useCreateTechnology } from '@/hooks/useTechnologies';
 import { servicesApi } from '@/services';
+
 import { cn } from '@/utils/cn';
 import { getErrorMessage } from '@/utils/errors';
 
 /**
- * Ajoute une technologie ou un développeur à une ou plusieurs applications.
- * Dans le backend, technologies et développeurs n'existent pas seuls : ce sont des
- * listes portées par chaque service. On met donc à jour chaque application choisie
- * (`PATCH /services/{id}` avec la liste complétée, en champs répétés).
+ * Crée une technologie ou un développeur, puis l'attache (optionnellement) aux
+ * applications sélectionnées via PATCH /services/{id}.
+ *
+ * Flux côté backend :
+ *   1) `POST /technologies` (ou `/developers`) → crée l'entité
+ *   2) pour chaque service coché : `PATCH /services/{id}` avec le champ répété
+ *      (`techStack` ou `developers`) contenant l'ancienne liste + le nouveau nom.
  *
  * `kind` : 'technology' | 'developer'.
  */
@@ -32,7 +38,7 @@ const CONFIG = {
   developer: { field: 'developers', icon: Code2, prefix: 'attach.developer' },
 };
 
-export function AttachToServicesDialog({ kind, open, onOpenChange, services, suggestions = [] }) {
+export function AttachToServicesDialog({ kind, open, onOpenChange, services = [] }) {
   const { t } = useTranslation();
   const [isSaving, setIsSaving] = useState(false);
   const { icon: Icon, prefix } = CONFIG[kind];
@@ -53,7 +59,6 @@ export function AttachToServicesDialog({ kind, open, onOpenChange, services, sug
           <AttachForm
             kind={kind}
             services={services}
-            suggestions={suggestions}
             onSavingChange={setIsSaving}
             onDone={() => onOpenChange(false)}
           />
@@ -63,18 +68,22 @@ export function AttachToServicesDialog({ kind, open, onOpenChange, services, sug
   );
 }
 
-function AttachForm({ kind, services, suggestions, onSavingChange, onDone }) {
+function AttachForm({ kind, services, onSavingChange, onDone }) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { field, prefix } = CONFIG[kind];
 
-  const [value, setValue] = useState('');
+  const createTech = useCreateTechnology();
+  const createDev = useCreateDeveloper();
+
+  const [name, setName] = useState('');
   const [selected, setSelected] = useState([]);
   const [filter, setFilter] = useState('');
   const [error, setError] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  const trimmed = value.trim();
+  const trimmed = name.trim();
+  // Un service « contient déjà » la valeur si elle est dans sa liste.
   const has = (service) =>
     trimmed !== '' && service[field].some((item) => item.toLowerCase() === trimmed.toLowerCase());
 
@@ -94,38 +103,43 @@ function AttachForm({ kind, services, suggestions, onSavingChange, onDone }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!trimmed) {
-      setError(t('validation.required'));
-      return;
-    }
-    const targets = services.filter((service) => selected.includes(service.id) && !has(service));
-    if (targets.length === 0) {
-      setError(t(`${prefix}.noTarget`));
+      setError(t('manage.errorNameRequired'));
       return;
     }
 
     setError(null);
     setIsSaving(true);
     onSavingChange(true);
+
     try {
-      // Une mise à jour partielle par application : uniquement la liste concernée.
+      // 1) Création de l'entité (POST /technologies ou /developers).
+      const createMutation = kind === 'technology' ? createTech : createDev;
+      await createMutation.mutateAsync({ name: trimmed });
+
+      // 2) Attachement aux services cochés (PATCH en concaténant).
+      const targets = services.filter((service) => selected.includes(service.id) && !has(service));
       for (const service of targets) {
         const formData = new FormData();
         [...service[field], trimmed].forEach((item) => formData.append(field, item));
         await servicesApi.update({ id: service.id, formData });
       }
-      await queryClient.invalidateQueries({ queryKey: serviceKeys.all });
-      toast.success(t(`${prefix}.success`, { name: trimmed, count: targets.length }));
+
+      // 3) Invalidation des caches.
+      queryClient.invalidateQueries({ queryKey: serviceKeys.all });
+      queryClient.invalidateQueries({
+        queryKey: kind === 'technology' ? technologyKeys.all : developerKeys.all,
+      });
+
+      toast.success(t('attach.done'));
       onDone();
     } catch (err) {
-      toast.error(getErrorMessage(err, t));
-      await queryClient.invalidateQueries({ queryKey: serviceKeys.all });
+      if (err?.status === 409) setError(t('manage.errorNameTaken'));
+      else setError(getErrorMessage(err, t) || t('attach.error'));
     } finally {
       setIsSaving(false);
       onSavingChange(false);
     }
   };
-
-  const listId = `attach-${kind}-suggestions`;
 
   return (
     <form noValidate onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col gap-4">
@@ -135,23 +149,17 @@ function AttachForm({ kind, services, suggestions, onSavingChange, onDone }) {
         </label>
         <Input
           id={`attach-${kind}-name`}
-          value={value}
+          value={name}
           onChange={(event) => {
-            setValue(event.target.value);
+            setName(event.target.value);
             if (error) setError(null);
           }}
           placeholder={t(`${prefix}.namePlaceholder`)}
-          list={listId}
           autoComplete="off"
           autoFocus
           disabled={isSaving}
           className="h-11"
         />
-        <datalist id={listId}>
-          {suggestions.map((item) => (
-            <option key={item} value={item} />
-          ))}
-        </datalist>
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col gap-2">
@@ -248,3 +256,4 @@ function AttachForm({ kind, services, suggestions, onSavingChange, onDone }) {
     </form>
   );
 }
+

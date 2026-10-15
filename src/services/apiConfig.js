@@ -50,21 +50,38 @@ export const API_ENDPOINTS = {
     me: '/auth/me', // GET → user
     // Hors contrat endpoints.json : actifs seulement si le backend les fournit (voir FEATURES).
     changePassword: '/auth/change-password', // POST { currentPassword, newPassword } → 204
-    sendCode: '/auth/send-code', // POST { email } → 204 (code à 4 chiffres par e-mail)
+    sendCode: '/auth/send-code', // POST { email } → { sent, devCode? } (204 en prod sans devCode)
     verifyCode: '/auth/verify-code', // POST { email, code } → { accessToken, user }
     register: '/auth/register', // POST { name, email, password } → 201 { accessToken, user }
-    requestPasswordReset: '/auth/forgot-password', // POST { email } → 204
+    requestPasswordReset: '/auth/forgot-password', // POST { email } → 204 (ou { sent, devCode? } en mock)
     resetPassword: '/auth/reset-password', // POST { email, code, newPassword } → 204
   },
   health: '/health', // GET → { status: 'ok' } | 503
   services: {
     list: '/services', // GET ?page&limit&search&tech → { data, meta } | POST (multipart) → Service
+    // Conservé pour rétro-compat : le backend expose désormais /technologies, mais
+    // /services/technologies reste un raccourci. Voir technologiesApi ci-dessous.
     technologies: '/services/technologies', // GET → string[]
     detail: (id) => `/services/${encodeURIComponent(id)}`, // GET | PATCH (multipart) | DELETE → 204
     document: (id, docId) =>
       `/services/${encodeURIComponent(id)}/documents/${encodeURIComponent(docId)}`, // DELETE → 204
     downloadDocument: (id, docId) =>
       `/services/${encodeURIComponent(id)}/documents/${encodeURIComponent(docId)}/download`, // GET → 302
+  },
+  // Nouvelles ressources indépendantes (entités 1ʳᵉ classe côté backend).
+  technologies: {
+    list: '/technologies', // GET → Technology[] (trié par nom)
+    detail: (id) => `/technologies/${encodeURIComponent(id)}`, // GET → Technology
+    create: '/technologies', // POST { name } → 201 Technology (admin)
+    update: (id) => `/technologies/${encodeURIComponent(id)}`, // PATCH { name } → Technology (admin)
+    remove: (id) => `/technologies/${encodeURIComponent(id)}`, // DELETE → 204 (admin)
+  },
+  developers: {
+    list: '/developers', // GET → Developer[] (trié par nom)
+    detail: (id) => `/developers/${encodeURIComponent(id)}`, // GET → Developer
+    create: '/developers', // POST { name, email?, role?, userId? } → 201 Developer (admin)
+    update: (id) => `/developers/${encodeURIComponent(id)}`, // PATCH → Developer (admin)
+    remove: (id) => `/developers/${encodeURIComponent(id)}`, // DELETE → 204 (admin)
   },
 };
 

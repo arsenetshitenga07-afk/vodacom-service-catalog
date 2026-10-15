@@ -11,29 +11,57 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useDevelopersQuery } from '@/hooks/useDevelopers';
 import { useServicesQuery } from '@/hooks/useServices';
 import { selectCanManage, useAuthStore } from '@/store/authStore';
-import { developerDirectory } from '@/utils/catalogStats';
 import { ROUTES } from '@/utils/constants';
 import { getInitials } from '@/utils/format';
 
 const MAX_TECH_SHOWN = 5;
 
-/** Développeurs du catalogue, avec leurs applications et technologies. */
+/**
+ * Développeurs du catalogue, avec leurs applications et technologies.
+ * Source : `GET /developers` (entité 1ʳᵉ classe côté backend) ; le mapping
+ * « dev → services / techs » est reconstruit côté client depuis la liste des
+ * services (les services portent `developers: string[]` et `techStack: string[]`).
+ */
 export default function DevelopersPage() {
   const { t } = useTranslation();
-  const { data: services = [], isPending } = useServicesQuery();
+  const { data: developers = [], isPending: isDevPending } = useDevelopersQuery();
+  const { data: services = [], isPending: isServicesPending } = useServicesQuery();
   const [search, setSearch] = useState('');
   const [attachOpen, setAttachOpen] = useState(false);
   const canManage = useAuthStore(selectCanManage);
 
-  const developers = useMemo(() => developerDirectory(services), [services]);
+  // Index des services par développeur (lowercase) → pour mapper chaque dev à ses services
+  // et à la liste agrégée de ses technologies.
+  const { servicesByDev, technologiesByDev } = useMemo(() => {
+    const servicesMap = new Map();
+    const techsMap = new Map();
+    services.forEach((service) => {
+      (service.developers ?? []).forEach((devName) => {
+        const key = devName.toLowerCase();
+        if (!servicesMap.has(key)) servicesMap.set(key, []);
+        servicesMap.get(key).push(service);
+        const techs = techsMap.get(key) ?? new Set();
+        (service.techStack ?? []).forEach((tech) => techs.add(tech));
+        techsMap.set(key, techs);
+      });
+    });
+    return {
+      servicesByDev: servicesMap,
+      technologiesByDev: Array.from(techsMap.entries()).map(([k, v]) => [k, Array.from(v)]),
+    };
+  }, [services]);
+
   const query = search.trim().toLowerCase();
-  const filtered = developers.filter(
-    (dev) =>
-      dev.name.toLowerCase().includes(query) ||
-      dev.technologies.some((tech) => tech.toLowerCase().includes(query)),
-  );
+  const filtered = developers.filter((dev) => {
+    if (dev.name.toLowerCase().includes(query)) return true;
+    const devTechs = technologiesByDev.find(([k]) => k === dev.name.toLowerCase())?.[1] ?? [];
+    return devTechs.some((tech) => tech.toLowerCase().includes(query));
+  });
+
+  const isPending = isDevPending || isServicesPending;
 
   return (
     <div className="space-y-6">
@@ -92,9 +120,12 @@ export default function DevelopersPage() {
       ) : (
         <ul className="grid grid-cols-1 gap-5 min-[1340px]:grid-cols-3 sm:grid-cols-2">
           {filtered.map((dev) => {
-            const hiddenTech = dev.technologies.length - MAX_TECH_SHOWN;
+            const devKey = dev.name.toLowerCase();
+            const devServices = servicesByDev.get(devKey) ?? [];
+            const devTechs = technologiesByDev.find(([k]) => k === devKey)?.[1] ?? [];
+            const hiddenTech = devTechs.length - MAX_TECH_SHOWN;
             return (
-              <li key={dev.name}>
+              <li key={dev.id}>
                 <article className="bg-card shadow-card hover:border-primary/30 flex h-full flex-col rounded-xl border p-5 transition-[border-color,box-shadow] hover:shadow-md">
                   <header className="flex items-center gap-3">
                     <span className="from-primary to-brand-dark text-primary-foreground grid size-12 shrink-0 place-items-center rounded-full bg-linear-to-br text-sm font-semibold">
@@ -103,11 +134,11 @@ export default function DevelopersPage() {
                     <div className="min-w-0 flex-1">
                       <h2 className="truncate text-base font-semibold">{dev.name}</h2>
                       <p className="text-muted-foreground text-xs">
-                        {t('pages.developers.appCount', { count: dev.services.length })}
+                        {t('pages.developers.appCount', { count: devServices.length })}
                       </p>
                     </div>
                     {canManage && (
-                      <ManageItemMenu kind="developer" name={dev.name} services={services} />
+                      <ManageItemMenu kind="developer" entityId={dev.id} name={dev.name} />
                     )}
                   </header>
 
@@ -116,7 +147,7 @@ export default function DevelopersPage() {
                       {t('pages.developers.applications')}
                     </p>
                     <ul className="space-y-1">
-                      {dev.services.map((service) => (
+                      {devServices.map((service) => (
                         <li key={service.id} className="flex items-center gap-2 text-sm">
                           <span
                             className="bg-primary size-1.5 shrink-0 rounded-full"
@@ -138,14 +169,14 @@ export default function DevelopersPage() {
                       {t('services.fields.techStack')}
                     </p>
                     <ul className="flex flex-wrap gap-1.5">
-                      {dev.technologies.slice(0, MAX_TECH_SHOWN).map((tech) => (
+                      {devTechs.slice(0, MAX_TECH_SHOWN).map((tech) => (
                         <li key={tech}>
                           <Badge variant="brand">{tech}</Badge>
                         </li>
                       ))}
                       {hiddenTech > 0 && (
                         <li>
-                          <Badge variant="muted" title={dev.technologies.join(', ')}>
+                          <Badge variant="muted" title={devTechs.join(', ')}>
                             +{hiddenTech}
                           </Badge>
                         </li>

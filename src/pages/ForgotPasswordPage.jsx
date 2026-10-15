@@ -404,7 +404,7 @@ export default function ForgotPasswordPage() {
                     )}
                   </p>
 
-                  {USE_MOCK_API && demoCode && (
+                  {demoCode && (
                     <p className="border-warning/25 bg-warning/10 text-foreground/80 flex items-start gap-2.5 rounded-lg border px-3 py-2.5 text-xs">
                       <Info className="text-warning mt-px size-4 shrink-0" aria-hidden="true" />
                       <span>

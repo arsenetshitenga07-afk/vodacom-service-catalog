@@ -320,6 +320,72 @@
     "legal": "Juridique & Réglementaire",
     "supply-chain": "Supply Chain & Logistique"
   },
+  "manage": {
+    "rename": "Renommer",
+    "newName": "Nouveau nom",
+    "success": "{{name}} a été renommé en {{newName}}.",
+    "error": "Impossible de renommer cet élément.",
+    "create": "Créer",
+    "createTitle_technology": "Nouvelle technologie",
+    "createTitle_developer": "Nouveau développeur",
+    "createDescription_technology": "Ajoutez une technologie au catalogue. Elle pourra ensuite être rattachée à des applications.",
+    "createDescription_developer": "Ajoutez un développeur au catalogue. Il pourra ensuite être rattaché à des applications.",
+    "nameLabel_technology": "Nom de la technologie",
+    "nameLabel_developer": "Nom du développeur",
+    "namePlaceholder_technology": "ex. React, PostgreSQL, TailwindCSS",
+    "namePlaceholder_developer": "ex. Jeanne Kabongo",
+    "emailLabel": "E-mail (optionnel)",
+    "emailPlaceholder": "nom@vodacom.cd",
+    "roleLabel": "Rôle (optionnel)",
+    "rolePlaceholder": "ex. Lead Frontend",
+    "created": "{{name}} a été ajouté au catalogue.",
+    "errorCreate": "Impossible de créer cet élément.",
+    "errorNameRequired": "Le nom est requis.",
+    "errorNameTooShort": "Au moins 2 caractères.",
+    "errorNameTooLong": "Maximum 60 caractères.",
+    "errorNameTaken": "Ce nom est déjà utilisé.",
+    "technology": {
+      "remove": "Supprimer la technologie",
+      "removeTitle": "Supprimer « {{name}} » ?",
+      "removeDescription": "La technologie sera retirée du catalogue. Les applications qui l'utilisent ne seront pas modifiées : la valeur sera simplement ignorée.",
+      "removed": "La technologie « {{name}} » a été supprimée.",
+      "renameTitle": "Renommer « {{name}} »",
+      "renameDescription": "Le nouveau nom remplacera l'ancien partout dans le catalogue (services, développeurs, etc.)."
+    },
+    "developer": {
+      "remove": "Supprimer le développeur",
+      "removeTitle": "Supprimer « {{name}} » ?",
+      "removeDescription": "Le développeur sera retiré du catalogue. Les applications qui le mentionnent ne seront pas modifiées.",
+      "removed": "Le développeur « {{name}} » a été supprimé.",
+      "renameTitle": "Renommer « {{name}} »",
+      "renameDescription": "Le nouveau nom remplacera l'ancien partout dans le catalogue."
+    }
+  },
+  "attach": {
+    "open": "Ajouter",
+    "filter": "Filtrer les applications…",
+    "selected_one": "{{count}} application sélectionnée",
+    "selected_other": "{{count}} applications sélectionnées",
+    "already": "Déjà présent",
+    "error": "Impossible d'enregistrer. Réessayez.",
+    "technology": {
+      "title": "Ajouter une technologie",
+      "description": "Créez une nouvelle technologie puis choisissez les applications qui l'utilisent.",
+      "nameLabel": "Nom de la technologie",
+      "namePlaceholder": "ex. React",
+      "servicesLabel": "Applications concernées",
+      "submit": "Créer et attacher"
+    },
+    "developer": {
+      "title": "Ajouter un développeur",
+      "description": "Créez un nouveau développeur puis choisissez les applications sur lesquelles il travaille.",
+      "nameLabel": "Nom du développeur",
+      "namePlaceholder": "ex. Jeanne Kabongo",
+      "servicesLabel": "Applications concernées",
+      "submit": "Créer et attacher"
+    },
+    "done": "La ressource a été créée et attachée aux applications sélectionnées."
+  },
   "nav": {
     "label": "Navigation principale",
     "section": "Menu",

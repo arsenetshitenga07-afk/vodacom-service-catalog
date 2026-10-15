@@ -12,24 +12,42 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useServicesQuery } from '@/hooks/useServices';
+import { useTechnologiesQuery } from '@/hooks/useTechnologies';
 import { selectCanManage, useAuthStore } from '@/store/authStore';
-import { technologyUsage } from '@/utils/catalogStats';
 import { ROUTES } from '@/utils/constants';
 
 const MAX_APPS_SHOWN = 4;
 
-/** Technologies utilisées dans le catalogue, avec les applications qui les emploient. */
+/**
+ * Technologies du catalogue, avec les applications qui les utilisent.
+ * Source : `GET /technologies` (entité 1ʳᵉ classe côté backend) ; le mapping
+ * « tech → services » est reconstruit côté client depuis la liste des services
+ * (les services portent `techStack: string[]`).
+ */
 export default function TechnologiesPage() {
   const { t } = useTranslation();
-  const { data: services = [], isPending } = useServicesQuery();
+  const { data: technologies = [], isPending: isTechPending } = useTechnologiesQuery();
+  const { data: services = [], isPending: isServicesPending } = useServicesQuery();
   const [search, setSearch] = useState('');
   const [attachOpen, setAttachOpen] = useState(false);
   const canManage = useAuthStore(selectCanManage);
 
-  const technologies = useMemo(() => technologyUsage(services), [services]);
-  const filtered = technologies.filter((tech) =>
-    tech.name.toLowerCase().includes(search.trim().toLowerCase()),
-  );
+  // Index des services par tech (lowercase) → pour mapper chaque tech à ses services.
+  const servicesByTech = useMemo(() => {
+    const map = new Map();
+    services.forEach((service) => {
+      (service.techStack ?? []).forEach((tech) => {
+        const key = tech.toLowerCase();
+        if (!map.has(key)) map.set(key, []);
+        map.get(key).push(service);
+      });
+    });
+    return map;
+  }, [services]);
+
+  const query = search.trim().toLowerCase();
+  const filtered = technologies.filter((tech) => tech.name.toLowerCase().includes(query));
+  const isPending = isTechPending || isServicesPending;
 
   return (
     <div className="space-y-6">
@@ -88,9 +106,10 @@ export default function TechnologiesPage() {
       ) : (
         <ul className="grid grid-cols-1 gap-5 min-[1340px]:grid-cols-3 sm:grid-cols-2">
           {filtered.map((tech) => {
-            const hidden = tech.services.length - MAX_APPS_SHOWN;
+            const techServices = servicesByTech.get(tech.name.toLowerCase()) ?? [];
+            const hidden = techServices.length - MAX_APPS_SHOWN;
             return (
-              <li key={tech.name}>
+              <li key={tech.id}>
                 <article className="bg-card shadow-card hover:border-primary/30 flex h-full flex-col rounded-xl border p-5 transition-[border-color,box-shadow] hover:shadow-md">
                   <header className="flex items-start justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-3">
@@ -100,17 +119,17 @@ export default function TechnologiesPage() {
                       <div className="min-w-0">
                         <h2 className="truncate text-base font-semibold">{tech.name}</h2>
                         <p className="text-muted-foreground text-xs">
-                          {t('pages.technologies.usedBy', { count: tech.services.length })}
+                          {t('pages.technologies.usedBy', { count: techServices.length })}
                         </p>
                       </div>
                     </div>
                     {canManage && (
-                      <ManageItemMenu kind="technology" name={tech.name} services={services} />
+                      <ManageItemMenu kind="technology" entityId={tech.id} name={tech.name} />
                     )}
                   </header>
 
                   <ul className="mt-4 flex-1 space-y-2">
-                    {tech.services.slice(0, MAX_APPS_SHOWN).map((service) => (
+                    {techServices.slice(0, MAX_APPS_SHOWN).map((service) => (
                       <li key={service.id} className="flex items-center gap-2.5 text-sm">
                         <ServiceAvatar
                           name={service.name}
