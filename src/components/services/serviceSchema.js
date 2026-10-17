@@ -1,6 +1,5 @@
 import { z } from 'zod';
 import { FEATURES } from '@/services/apiConfig';
-import { DEPARTMENT_IDS } from '@/utils/departments';
 import { toDateInputValue } from '@/utils/format';
 
 /** Les messages sont des clés i18n, traduites par <FormField>. */
@@ -22,11 +21,11 @@ export const serviceSchema = z
   .object({
     name: z.string().trim().min(1, 'validation.required').max(120, 'validation.tooLong'),
     description: z.string().trim().min(1, 'validation.required').max(2000, 'validation.tooLong'),
-    // Obligatoire seulement si le backend gère les départements (FEATURES.departments).
+    // Le département est obligatoire côté feature flag. La validation se fait
+    // contre la liste du backend (source de vérité) — récupérée par `useServiceDepartmentsQuery`.
+    // On ne vérifie plus contre `DEPARTMENT_IDS` (constante locale obsolète).
     department: FEATURES.departments
-      ? z.string().refine((value) => DEPARTMENT_IDS.includes(value), {
-          message: 'validation.required',
-        })
+      ? z.string().trim().min(1, 'validation.required')
       : z.string().optional(),
     developers: z.array(z.string()).min(1, 'validation.developersRequired'),
     githubUrl: optionalUrl,
