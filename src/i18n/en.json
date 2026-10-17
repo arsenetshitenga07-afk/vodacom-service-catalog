@@ -262,7 +262,18 @@
       "morning": "Good morning, {{name}}",
       "afternoon": "Good afternoon, {{name}}",
       "evening": "Good evening, {{name}}"
-    }
+    },
+    "counts": {
+      "services": "Services",
+      "users": "Users",
+      "developers": "Developers",
+      "technologies": "Technologies",
+      "documents": "Documents"
+    },
+    "byDepartment": "Breakdown by department",
+    "byRole": "Breakdown by role",
+    "recentActivity": "Recent activity",
+    "noActivity": "No activity yet."
   },
   "status": {
     "live": "In production",
@@ -483,20 +494,7 @@
       "new_other": "{{count}} new"
     }
   },
-  "dashboard": {
-    "counts": {
-      "services": "Services",
-      "users": "Users",
-      "developers": "Developers",
-      "technologies": "Technologies",
-      "documents": "Documents"
-    },
-    "byDepartment": "Breakdown by department",
-    "byRole": "Breakdown by role",
-    "recentActivity": "Recent activity",
-    "noActivity": "No activity yet."
-  },
-  "admin": {
+  "nav": {
     "label": "Main navigation",
     "section": "Menu",
     "open": "Open menu",

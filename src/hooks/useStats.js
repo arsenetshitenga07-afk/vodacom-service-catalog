@@ -23,13 +23,16 @@ export function useDashboardStatsQuery(options = {}) {
 
 /**
  * Liste des départements acceptés par le backend.
- * Cachée 5 min (la liste bouge très rarement).
+ * staleTime court (10s) pour qu'un admin qui change un département voie le
+ * changement rapidement ; refetch au focus pour rafraîchir en revenant
+ * sur la page.
  */
 export function useServiceDepartmentsQuery(options = {}) {
   return useQuery({
     queryKey: statsKeys.departments(),
     queryFn: ({ signal }) => statsApi.departments({ signal }),
-    staleTime: 5 * 60_000,
+    staleTime: 10_000,
+    refetchOnWindowFocus: true,
     ...options,
   });
 }

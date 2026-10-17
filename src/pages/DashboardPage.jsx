@@ -187,13 +187,14 @@ export default function DashboardPage() {
   );
 }
 
-/** Petites cartes compteur (services / users / devs / techs / docs). */
+/** Petites cartes compteur (services / users / devs / techs / docs). Chaque carte
+ *  est un lien vers la page correspondante. */
 const COUNT_CARDS = [
-  { key: 'services', icon: Boxes },
-  { key: 'users', icon: UsersIcon },
-  { key: 'developers', icon: Code2 },
-  { key: 'technologies', icon: Layers },
-  { key: 'documents', icon: FileText },
+  { key: 'services', icon: Boxes, to: ROUTES.applications },
+  { key: 'users', icon: UsersIcon, to: ROUTES.adminUsers },
+  { key: 'developers', icon: Code2, to: ROUTES.developers },
+  { key: 'technologies', icon: Layers, to: ROUTES.technologies },
+  { key: 'documents', icon: FileText, to: ROUTES.applications },
 ];
 
 /**
@@ -206,12 +207,16 @@ function AdminOverview({ stats, isLoading, recentNotifications }) {
 
   return (
     <section aria-label={t('dashboard.counts.services')} className="space-y-5">
-      {/* 5 cartes compteur */}
+      {/* 5 cartes compteur (cliquables) */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        {COUNT_CARDS.map(({ key, icon: Icon }) => {
+        {COUNT_CARDS.map(({ key, icon: Icon, to }) => {
           const value = stats?.counts?.[key] ?? 0;
           return (
-            <div key={key} className="bg-card shadow-card rounded-2xl border p-4">
+            <Link
+              key={key}
+              to={to}
+              className="bg-card shadow-card hover:border-primary/40 rounded-2xl border p-4 transition focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-hidden"
+            >
               <div className="flex items-center gap-3">
                 <span className="bg-primary/10 text-primary grid size-10 shrink-0 place-items-center rounded-xl">
                   <Icon className="size-5" aria-hidden="true" />
@@ -225,7 +230,7 @@ function AdminOverview({ stats, isLoading, recentNotifications }) {
                   </p>
                 </div>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>

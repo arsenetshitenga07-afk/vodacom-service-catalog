@@ -19,10 +19,10 @@ export function formatNotification(notif, t) {
  */
 export function getNotificationLink(notif) {
   const pluralRoutes = {
-    service: ROUTES.serviceDetail(notif.targetId),
-    user: ROUTES.userDetail(notif.targetId),
-    developer: ROUTES.developerDetail(notif.targetId),
-    technology: ROUTES.technologyDetail(notif.targetId),
+    service: ROUTES.applicationDetail(notif.targetId),
+    user: ROUTES.adminUsers,
+    developer: ROUTES.developers,
+    technology: ROUTES.technologies,
   };
   return pluralRoutes[notif.targetType] ?? '/';
 }

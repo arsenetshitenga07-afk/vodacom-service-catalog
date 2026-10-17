@@ -255,15 +255,6 @@
     "copyright": "© {{year}} Vodacom Congo. Tous droits réservés.",
     "version": "Service Catalog v{{version}}"
   },
-  "dashboard": {
-    "eyebrow": "Portail interne Vodacom",
-    "subtitle": "Retrouvez, documentez et gérez toutes les applications internes de Vodacom — environnements, équipes et documentation au même endroit.",
-    "greeting": {
-      "morning": "Bonjour, {{name}}",
-      "afternoon": "Bon après-midi, {{name}}",
-      "evening": "Bonsoir, {{name}}"
-    }
-  },
   "status": {
     "live": "En production",
     "uat": "UAT uniquement",
@@ -484,6 +475,13 @@
     }
   },
   "dashboard": {
+    "eyebrow": "Portail interne Vodacom",
+    "subtitle": "Retrouvez, documentez et gérez toutes les applications internes de Vodacom — environnements, équipes et documentation au même endroit.",
+    "greeting": {
+      "morning": "Bonjour, {{name}}",
+      "afternoon": "Bon après-midi, {{name}}",
+      "evening": "Bonsoir, {{name}}"
+    },
     "counts": {
       "services": "Services",
       "users": "Utilisateurs",
@@ -496,7 +494,7 @@
     "recentActivity": "Activité récente",
     "noActivity": "Pas encore d’activité."
   },
-  "admin": {
+  "nav": {
     "label": "Navigation principale",
     "section": "Menu",
     "open": "Ouvrir le menu",
