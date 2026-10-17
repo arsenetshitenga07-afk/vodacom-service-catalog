@@ -38,13 +38,34 @@ function useInvalidateUsers() {
   };
 }
 
+/**
+ * Crée un nouvel utilisateur (admin). Met aussi à jour la liste et le fil
+ * d'activité (le backend crée une notification `create` côté NestJS).
+ */
+export function useCreateUser(options = {}) {
+  const invalidate = useInvalidateUsers();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: usersApi.create,
+    ...options,
+    onSuccess: (created, ...rest) => {
+      invalidate();
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
+      options.onSuccess?.(created, ...rest);
+    },
+  });
+}
+
 export function useUpdateUser(options = {}) {
   const invalidate = useInvalidateUsers();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: usersApi.update,
     ...options,
     onSuccess: (updated, ...rest) => {
       invalidate();
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
       options.onSuccess?.(updated, ...rest);
     },
   });
@@ -52,11 +73,14 @@ export function useUpdateUser(options = {}) {
 
 export function useUpdateUserRole(options = {}) {
   const invalidate = useInvalidateUsers();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: usersApi.updateRole,
     ...options,
     onSuccess: (updated, ...rest) => {
       invalidate();
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
       options.onSuccess?.(updated, ...rest);
     },
   });
@@ -64,11 +88,14 @@ export function useUpdateUserRole(options = {}) {
 
 export function useDeleteUser(options = {}) {
   const invalidate = useInvalidateUsers();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: usersApi.remove,
     ...options,
     onSuccess: (id, ...rest) => {
       invalidate();
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
       options.onSuccess?.(id, ...rest);
     },
   });

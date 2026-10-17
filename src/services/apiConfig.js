@@ -87,9 +87,23 @@ export const API_ENDPOINTS = {
   users: {
     list: '/users', // GET ?page&limit → { data: User[], meta: { total, page, limit, totalPages } }
     detail: (id) => `/users/${encodeURIComponent(id)}`, // GET → User (sans hash)
+    create: '/users', // POST { name, email, password, role } → 201 User (admin)
     update: (id) => `/users/${encodeURIComponent(id)}`, // PATCH { name?, email? } → User (admin)
     updateRole: (id) => `/users/${encodeURIComponent(id)}/role`, // PATCH { role: 'admin' | 'user' } → User (admin)
     remove: (id) => `/users/${encodeURIComponent(id)}`, // DELETE → 204 (admin)
+  },
+  // Fil d'activité : automatiquement alimenté par le backend à chaque
+  // create/update/delete de service, developer, technology, user.
+  notifications: {
+    list: '/notifications', // GET ?page&limit → { data: Notification[], meta: {…} }
+  },
+  // Statistiques agrégées (admin). Une seule route, lisible par tout connecté.
+  stats: {
+    dashboard: '/stats/dashboard', // GET → { counts, servicesByDepartment, usersByRole, recentActivity }
+  },
+  // Liste des départements. Valeurs identiques au backend, à appeler pour rester synchro.
+  serviceDepartments: {
+    list: '/services/departments', // GET → string[]
   },
 };
 

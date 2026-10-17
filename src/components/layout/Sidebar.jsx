@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
-import { Boxes, Code2, LayoutDashboard, Layers, Plus, Settings, Users } from 'lucide-react';
+import { Activity, Boxes, Code2, LayoutDashboard, Layers, Plus, Settings, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useNotificationsQuery } from '@/hooks/useNotifications';
 import { useServicesQuery } from '@/hooks/useServices';
 import { developerDirectory, technologyUsage } from '@/utils/catalogStats';
 import { selectCanManage, useAuthStore } from '@/store/authStore';
@@ -18,6 +19,9 @@ export function Sidebar({ onNavigate, className }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: services = [], isPending } = useServicesQuery();
+  // Fil d'activité : alimente le badge "X nouvelles" sur l'entrée Notifications.
+  // On ne récupère que la 1ʳᵉ page (limit 20) pour éviter de charger tout l'historique.
+  const { data: notifData } = useNotificationsQuery({ page: 1, limit: 20 });
   const canManage = useAuthStore(selectCanManage);
 
   const counts = useMemo(
@@ -25,8 +29,9 @@ export function Sidebar({ onNavigate, className }) {
       applications: services.length,
       technologies: technologyUsage(services).length,
       developers: developerDirectory(services).length,
+      notifications: notifData?.meta?.total ?? 0,
     }),
-    [services],
+    [services, notifData],
   );
 
   const items = [
@@ -62,6 +67,13 @@ export function Sidebar({ onNavigate, className }) {
           {items.map((item) => (
             <NavItem key={item.to} {...item} isPending={isPending} onNavigate={onNavigate} />
           ))}
+          <NavItem
+            to={ROUTES.notifications}
+            label={t('nav.notifications')}
+            icon={Activity}
+            count={counts.notifications}
+            onNavigate={onNavigate}
+          />
         </ul>
       </div>
 
@@ -136,3 +148,4 @@ function NavItem({ to, label, icon: Icon, count, end, isPending, onNavigate }) {
     </li>
   );
 }
+

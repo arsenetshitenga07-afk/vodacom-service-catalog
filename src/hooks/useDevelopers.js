@@ -23,13 +23,23 @@ function useCacheUpdater() {
   };
 }
 
+function useSideEffects() {
+  const queryClient = useQueryClient();
+  return () => {
+    queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    queryClient.invalidateQueries({ queryKey: ['stats'] });
+  };
+}
+
 export function useCreateDeveloper(options = {}) {
   const updateCache = useCacheUpdater();
+  const sideEffects = useSideEffects();
   return useMutation({
     mutationFn: developersApi.create,
     ...options,
     onSuccess: (created, ...rest) => {
       updateCache((devs) => [...devs, created].sort((a, b) => a.name.localeCompare(b.name)));
+      sideEffects();
       options.onSuccess?.(created, ...rest);
     },
   });
@@ -37,6 +47,7 @@ export function useCreateDeveloper(options = {}) {
 
 export function useUpdateDeveloper(options = {}) {
   const updateCache = useCacheUpdater();
+  const sideEffects = useSideEffects();
   return useMutation({
     mutationFn: developersApi.update,
     ...options,
@@ -44,6 +55,7 @@ export function useUpdateDeveloper(options = {}) {
       updateCache((devs) =>
         devs.map((d) => (d.id === updated.id ? updated : d)).sort((a, b) => a.name.localeCompare(b.name)),
       );
+      sideEffects();
       options.onSuccess?.(updated, ...rest);
     },
   });
@@ -51,11 +63,13 @@ export function useUpdateDeveloper(options = {}) {
 
 export function useDeleteDeveloper(options = {}) {
   const updateCache = useCacheUpdater();
+  const sideEffects = useSideEffects();
   return useMutation({
     mutationFn: developersApi.remove,
     ...options,
     onSuccess: (id, ...rest) => {
       updateCache((devs) => devs.filter((d) => d.id !== id));
+      sideEffects();
       options.onSuccess?.(id, ...rest);
     },
   });

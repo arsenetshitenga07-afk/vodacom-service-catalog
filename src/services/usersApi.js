@@ -38,6 +38,16 @@ export const usersApi = {
   },
 
   /**
+   * Crée un nouvel utilisateur (admin only). Génère automatiquement une entrée
+   * dans le fil d'activité côté backend.
+   * @param {{ name: string, email: string, password: string, role: 'admin' | 'user' }} payload
+   */
+  async create(payload) {
+    const { data } = await httpClient.post(API_ENDPOINTS.users.create, payload);
+    return mapUserFromApi(unwrapEntity(data));
+  },
+
+  /**
    * Modifie nom/email. Ne touche pas le rôle.
    * @param {{ id: string, name?: string, email?: string }} params
    */

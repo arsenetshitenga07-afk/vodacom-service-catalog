@@ -20,7 +20,7 @@ import { useCreateService, useUpdateService } from '@/hooks/useServices';
 import { FEATURES, toServiceFormData } from '@/services';
 import { cn } from '@/utils/cn';
 import { COMMON_TECHNOLOGIES, MAX_DOCUMENTS } from '@/utils/constants';
-import { DEPARTMENTS } from '@/utils/departments';
+import { useServiceDepartmentsQuery } from '@/hooks/useStats';
 import { getErrorMessage } from '@/utils/errors';
 import { FileUploader } from './FileUploader';
 import { TagInput } from './TagInput';
@@ -85,6 +85,9 @@ function ServiceForm({ service, knownTechnologies, onPendingChange, onCancel, on
 
   const [newFiles, setNewFiles] = useState([]);
   const [removedDocumentIds, setRemovedDocumentIds] = useState([]);
+
+  // Liste des départements synchro avec le backend (`GET /services/departments`).
+  const { data: departments = [] } = useServiceDepartmentsQuery();
 
   const {
     register,
@@ -192,9 +195,9 @@ function ServiceForm({ service, knownTechnologies, onPendingChange, onCancel, on
                     <option value="" disabled>
                       {t('services.placeholders.department')}
                     </option>
-                    {DEPARTMENTS.map(({ id }) => (
-                      <option key={id} value={id}>
-                        {t(`departments.${id}`)}
+                    {departments.map((dept) => (
+                      <option key={dept} value={dept}>
+                        {t(`departments.${dept}`, { defaultValue: dept })}
                       </option>
                     ))}
                   </select>

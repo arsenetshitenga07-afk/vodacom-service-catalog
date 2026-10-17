@@ -87,4 +87,9 @@ export const ROUTES = {
   developers: '/developers',
   settings: '/settings',
   adminUsers: '/admin/users',
+  notifications: '/notifications',
+  serviceDetail: (id = ':id') => `/services/${id}`,
+  developerDetail: (id = ':id') => `/developers/${id}`,
+  technologyDetail: (id = ':id') => `/technologies/${id}`,
+  userDetail: (id = ':id') => `/admin/users/${id}`,
 };

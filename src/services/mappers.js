@@ -163,6 +163,63 @@ export function mapUserFromApi(raw) {
 }
 
 /**
+ * @typedef {Object} Notification
+ * @property {string} id
+ * @property {string} actorId
+ * @property {string} actorName
+ * @property {'create' | 'update' | 'delete'} action
+ * @property {'service' | 'user' | 'developer' | 'technology'} targetType
+ * @property {string} targetId
+ * @property {string} targetLabel
+ * @property {string} createdAt
+ */
+
+/** Backend Notification → Notification. */
+export function mapNotificationFromApi(raw) {
+  return {
+    id: String(raw.id ?? raw._id ?? ''),
+    actorId: String(raw.actorId ?? raw.actor_id ?? ''),
+    actorName: String(raw.actorName ?? raw.actor_name ?? 'Quelqu’un').trim(),
+    action: raw.action ?? 'create',
+    targetType: raw.targetType ?? raw.target_type ?? 'service',
+    targetId: String(raw.targetId ?? raw.target_id ?? ''),
+    targetLabel: String(raw.targetLabel ?? raw.target_label ?? '').trim(),
+    createdAt: raw.createdAt ?? raw.created_at ?? null,
+  };
+}
+
+/**
+ * @typedef {Object} DashboardStats
+ * @property {{ services: number, users: number, developers: number, technologies: number, documents: number }} counts
+ * @property {Record<string, number>} servicesByDepartment
+ * @property {Record<'admin' | 'user', number>} usersByRole
+ * @property {number} recentActivity
+ */
+
+/** Backend Stats → DashboardStats. */
+export function mapDashboardStatsFromApi(raw) {
+  const counts = raw?.counts ?? {};
+  const byDept = raw?.servicesByDepartment ?? raw?.services_by_department ?? {};
+  const byRole = raw?.usersByRole ?? raw?.users_by_role ?? {};
+  return {
+    counts: {
+      services: Number(counts.services ?? 0),
+      users: Number(counts.users ?? 0),
+      developers: Number(counts.developers ?? 0),
+      technologies: Number(counts.technologies ?? 0),
+      documents: Number(counts.documents ?? 0),
+    },
+    servicesByDepartment: Object.fromEntries(
+      Object.entries(byDept).map(([k, v]) => [String(k), Number(v) || 0]),
+    ),
+    usersByRole: Object.fromEntries(
+      Object.entries(byRole).map(([k, v]) => [String(k), Number(v) || 0]),
+    ),
+    recentActivity: Number(raw?.recentActivity ?? raw?.recent_activity ?? 0),
+  };
+}
+
+/**
  * Construit le FormData envoyé à la création / mise à jour, au format de
  * `POST /services` et `PATCH /services/{id}` (voir endpoints.json) :
  * - `developers` et `techStack` : champ répété (une valeur par entrée) ;

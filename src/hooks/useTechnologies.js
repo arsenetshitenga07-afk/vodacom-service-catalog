@@ -24,13 +24,23 @@ function useCacheUpdater() {
   };
 }
 
+function useSideEffects() {
+  const queryClient = useQueryClient();
+  return () => {
+    queryClient.invalidateQueries({ queryKey: ['notifications'] });
+    queryClient.invalidateQueries({ queryKey: ['stats'] });
+  };
+}
+
 export function useCreateTechnology(options = {}) {
   const updateCache = useCacheUpdater();
+  const sideEffects = useSideEffects();
   return useMutation({
     mutationFn: technologiesApi.create,
     ...options,
     onSuccess: (created, ...rest) => {
       updateCache((techs) => [...techs, created].sort((a, b) => a.name.localeCompare(b.name)));
+      sideEffects();
       options.onSuccess?.(created, ...rest);
     },
   });
@@ -38,6 +48,7 @@ export function useCreateTechnology(options = {}) {
 
 export function useUpdateTechnology(options = {}) {
   const updateCache = useCacheUpdater();
+  const sideEffects = useSideEffects();
   return useMutation({
     mutationFn: technologiesApi.update,
     ...options,
@@ -45,6 +56,7 @@ export function useUpdateTechnology(options = {}) {
       updateCache((techs) =>
         techs.map((t) => (t.id === updated.id ? updated : t)).sort((a, b) => a.name.localeCompare(b.name)),
       );
+      sideEffects();
       options.onSuccess?.(updated, ...rest);
     },
   });
@@ -52,11 +64,13 @@ export function useUpdateTechnology(options = {}) {
 
 export function useDeleteTechnology(options = {}) {
   const updateCache = useCacheUpdater();
+  const sideEffects = useSideEffects();
   return useMutation({
     mutationFn: technologiesApi.remove,
     ...options,
     onSuccess: (id, ...rest) => {
       updateCache((techs) => techs.filter((t) => t.id !== id));
+      sideEffects();
       options.onSuccess?.(id, ...rest);
     },
   });

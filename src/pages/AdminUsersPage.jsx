@@ -31,6 +31,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { PersonAvatar } from '@/components/common/Avatar';
+import { CreateUserDialog } from '@/components/admin/CreateUserDialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -75,6 +76,7 @@ export default function AdminUsersPage() {
   const [roleFilter, setRoleFilter] = useState('all');
   const [editTarget, setEditTarget] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [createOpen, setCreateOpen] = useState(false);
 
   const { data, isPending, isError, error, isFetching } = useUsersQuery({ page, limit: USERS_PAGE_SIZE });
   const roleMutation = useUpdateUserRole();
@@ -145,6 +147,12 @@ export default function AdminUsersPage() {
           isPending
             ? t('admin.users.loading')
             : t('admin.users.subtitle', { count: total })
+        }
+        action={
+          <Button onClick={() => setCreateOpen(true)} className="shadow-brand">
+            <UserPlus />
+            {t('admin.users.createButton')}
+          </Button>
         }
       />
 
@@ -297,6 +305,8 @@ export default function AdminUsersPage() {
         onOpenChange={(open) => !open && setEditTarget(null)}
         onSaved={() => setEditTarget(null)}
       />
+
+      <CreateUserDialog open={createOpen} onOpenChange={setCreateOpen} />
 
       <AlertDialog open={Boolean(deleteTarget)} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <AlertDialogContent>

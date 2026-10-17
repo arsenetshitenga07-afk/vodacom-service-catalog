@@ -19,7 +19,14 @@
     "removeItem": "Retirer {{item}}",
     "loading": "Chargement…",
     "notSet": "Non renseigné",
-    "error": "Une erreur est survenue. Réessayez."
+    "error": "Une erreur est survenue. Réessayez.",
+    "toast": {
+      "created_one": "{{name}} a été créé.",
+      "created_other": "{{count}} éléments créés.",
+      "updated": "{{name}} a été mis à jour.",
+      "deleted": "{{name}} a été supprimé.",
+      "saveError": "Impossible d’enregistrer les modifications."
+    }
   },
   "header": {
     "language": "Langue",
@@ -418,6 +425,12 @@
         "page": "Page {{page}} sur {{total}}"
       },
       "edit": "Modifier le profil",
+      "createButton": "Créer un utilisateur",
+      "createTitle": "Nouvel utilisateur",
+      "createDescription": "Créez un compte pour un membre de l’équipe. Il pourra se connecter immédiatement.",
+      "passwordLabel": "Mot de passe provisoire",
+      "passwordHint": "Minimum 8 caractères. L’utilisateur pourra le changer après sa première connexion.",
+      "roleLabel": "Rôle",
       "editTitle": "Modifier « {{name}} »",
       "editDescription": "Mettez à jour le nom et l'adresse e-mail. Le rôle se modifie séparément.",
       "nameLabel": "Nom complet",
@@ -444,7 +457,46 @@
       "notAllowed": "Vous n'avez pas les droits pour accéder à cette page."
     }
   },
-  "nav": {
+  "notifications": {
+    "title": "Fil d’activité",
+    "subtitle_one": "{{count}} activité récente",
+    "subtitle_other": "{{count}} activités récentes",
+    "loading": "Chargement des notifications…",
+    "empty": "Aucune activité récente.",
+    "error": "Impossible de charger le fil d’activité.",
+    "action": {
+      "create": "a ajouté",
+      "update": "a modifié",
+      "delete": "a supprimé"
+    },
+    "target": {
+      "service": "un service",
+      "user": "un utilisateur",
+      "developer": "un développeur",
+      "technology": "une technologie"
+    },
+    "actor": {
+      "default": "Quelqu’un"
+    },
+    "badge": {
+      "new_one": "{{count}} nouvelle",
+      "new_other": "{{count}} nouvelles"
+    }
+  },
+  "dashboard": {
+    "counts": {
+      "services": "Services",
+      "users": "Utilisateurs",
+      "developers": "Développeurs",
+      "technologies": "Technologies",
+      "documents": "Documents"
+    },
+    "byDepartment": "Répartition par département",
+    "byRole": "Répartition par rôle",
+    "recentActivity": "Activité récente",
+    "noActivity": "Pas encore d’activité."
+  },
+  "admin": {
     "label": "Navigation principale",
     "section": "Menu",
     "open": "Ouvrir le menu",
@@ -455,7 +507,8 @@
     "hide": "Masquer la barre latérale",
     "show": "Afficher la barre latérale",
     "settings": "Paramètres",
-    "adminUsers": "Utilisateurs"
+    "adminUsers": "Utilisateurs",
+    "notifications": "Fil d’activité"
   },
   "pages": {
     "dashboard": {

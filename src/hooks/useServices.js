@@ -25,11 +25,14 @@ function useCacheUpdater() {
 
 export function useCreateService(options = {}) {
   const updateCache = useCacheUpdater();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: servicesApi.create,
     ...options,
     onSuccess: (created, ...rest) => {
       updateCache((services) => [created, ...services]);
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
       options.onSuccess?.(created, ...rest);
     },
   });
@@ -37,11 +40,14 @@ export function useCreateService(options = {}) {
 
 export function useUpdateService(options = {}) {
   const updateCache = useCacheUpdater();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: servicesApi.update,
     ...options,
     onSuccess: (updated, ...rest) => {
       updateCache((services) => services.map((s) => (s.id === updated.id ? updated : s)));
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
       options.onSuccess?.(updated, ...rest);
     },
   });
@@ -49,11 +55,14 @@ export function useUpdateService(options = {}) {
 
 export function useDeleteService(options = {}) {
   const updateCache = useCacheUpdater();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: servicesApi.remove,
     ...options,
     onSuccess: (id, ...rest) => {
       updateCache((services) => services.filter((s) => s.id !== id));
+      queryClient.invalidateQueries({ queryKey: ['notifications'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
       options.onSuccess?.(id, ...rest);
     },
   });

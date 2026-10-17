@@ -19,7 +19,14 @@
     "removeItem": "Remove {{item}}",
     "loading": "Loading…",
     "notSet": "Not set",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "toast": {
+      "created_one": "{{name}} has been created.",
+      "created_other": "{{count}} items created.",
+      "updated": "{{name}} has been updated.",
+      "deleted": "{{name}} has been deleted.",
+      "saveError": "Unable to save changes."
+    }
   },
   "header": {
     "language": "Language",
@@ -418,6 +425,12 @@
         "page": "Page {{page}} of {{total}}"
       },
       "edit": "Edit profile",
+      "createButton": "Create a user",
+      "createTitle": "New user",
+      "createDescription": "Create an account for a team member. They will be able to log in immediately.",
+      "passwordLabel": "Temporary password",
+      "passwordHint": "Minimum 8 characters. The user can change it after first login.",
+      "roleLabel": "Role",
       "editTitle": "Edit \"{{name}}\"",
       "editDescription": "Update the name and email address. The role is changed separately.",
       "nameLabel": "Full name",
@@ -444,7 +457,46 @@
       "notAllowed": "You don't have permission to access this page."
     }
   },
-  "nav": {
+  "notifications": {
+    "title": "Activity feed",
+    "subtitle_one": "{{count}} recent activity",
+    "subtitle_other": "{{count}} recent activities",
+    "loading": "Loading notifications…",
+    "empty": "No recent activity.",
+    "error": "Unable to load the activity feed.",
+    "action": {
+      "create": "added",
+      "update": "updated",
+      "delete": "deleted"
+    },
+    "target": {
+      "service": "a service",
+      "user": "a user",
+      "developer": "a developer",
+      "technology": "a technology"
+    },
+    "actor": {
+      "default": "Someone"
+    },
+    "badge": {
+      "new_one": "{{count}} new",
+      "new_other": "{{count}} new"
+    }
+  },
+  "dashboard": {
+    "counts": {
+      "services": "Services",
+      "users": "Users",
+      "developers": "Developers",
+      "technologies": "Technologies",
+      "documents": "Documents"
+    },
+    "byDepartment": "Breakdown by department",
+    "byRole": "Breakdown by role",
+    "recentActivity": "Recent activity",
+    "noActivity": "No activity yet."
+  },
+  "admin": {
     "label": "Main navigation",
     "section": "Menu",
     "open": "Open menu",
@@ -455,7 +507,8 @@
     "hide": "Hide sidebar",
     "show": "Show sidebar",
     "settings": "Settings",
-    "adminUsers": "Users"
+    "adminUsers": "Users",
+    "notifications": "Activity feed"
   },
   "pages": {
     "dashboard": {
